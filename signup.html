@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --navy: #0f172a;
+            --text: #172554;
+            --muted: #64748b;
+            --border: #dbe3ef;
+            --surface: #ffffff;
+            --background: #f1f5f9;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(37, 99, 235, 0.20), transparent 30%),
+                radial-gradient(circle at 90% 90%, rgba(29, 78, 216, 0.18), transparent 30%),
+                linear-gradient(135deg, #0f172a 0%, #172554 48%, #2563eb 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            top: -130px;
+            right: -100px;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            bottom: -120px;
+            left: -100px;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 460px;
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 24px;
+            padding: 38px 34px 30px;
+            box-shadow:
+                0 30px 70px rgba(0, 0, 0, 0.28),
+                0 8px 25px rgba(15, 23, 42, 0.12);
+            position: relative;
+            z-index: 1;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 35px;
+            right: 35px;
+            height: 4px;
+            background: linear-gradient(
+                90deg,
+                #2563eb,
+                #60a5fa,
+                #2563eb
+            );
+            border-radius: 0 0 10px 10px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 17px;
+            border-radius: 22px;
+            background: linear-gradient(
+                145deg,
+                #eff6ff,
+                #dbeafe
+            );
+            border: 1px solid #bfdbfe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 31px;
+            box-shadow:
+                0 8px 20px rgba(37, 99, 235, 0.12);
+        }
+
+        h1 {
+            color: var(--text);
+            font-size: 28px;
+            line-height: 1.2;
+            font-weight: 750;
+            letter-spacing: -0.5px;
+            margin-bottom: 9px;
+        }
+
+        .header p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 19px;
+        }
+
+        label {
+            display: block;
+            color: #1e293b;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.1px;
+        }
+
+        .password-box {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            height: 50px;
+            padding: 14px 50px 14px 15px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #f8fafc;
+            color: #0f172a;
+            font-size: 15px;
+            outline: none;
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .normal-input {
+            padding: 14px 15px;
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        input:hover {
+            border-color: #b8c6d9;
+            background: #ffffff;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            background: #ffffff;
+            box-shadow:
+                0 0 0 4px rgba(37, 99, 235, 0.10),
+                0 4px 12px rgba(37, 99, 235, 0.06);
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 9px;
+            background: transparent;
+            color: #64748b;
+            font-size: 19px;
+            cursor: pointer;
+            padding: 4px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+        .eye-btn:hover {
+            background: #eff6ff;
+            color: var(--primary);
+        }
+
+        .eye-btn:focus-visible {
+            outline: 3px solid rgba(37, 99, 235, 0.20);
+            outline-offset: 2px;
+        }
+
+        .create-btn {
+            width: 100%;
+            height: 52px;
+            border: none;
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #1d4ed8
+            );
+            color: #ffffff;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-top: 7px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.1px;
+            cursor: pointer;
+            box-shadow:
+                0 8px 18px rgba(37, 99, 235, 0.25);
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .create-btn:hover {
+            background: linear-gradient(
+                135deg,
+                #1d4ed8,
+                #1e40af
+            );
+            transform: translateY(-1px);
+            box-shadow:
+                0 12px 24px rgba(37, 99, 235, 0.30);
+        }
+
+        .create-btn:active {
+            transform: translateY(0);
+            box-shadow:
+                0 5px 12px rgba(37, 99, 235, 0.22);
+        }
+
+        .create-btn:focus-visible {
+            outline: 3px solid rgba(37, 99, 235, 0.25);
+            outline-offset: 3px;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 23px;
+            padding-top: 20px;
+            border-top: 1px solid #eef2f7;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .login-link a {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+            margin-left: 3px;
+            transition: color 0.2s ease;
+        }
+
+        .login-link a:hover {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 11.5px;
+            line-height: 1.5;
+            margin-top: 17px;
+        }
+
+        @media (max-width: 500px) {
+
+            body {
+                padding: 15px;
+                align-items: center;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 32px 21px 25px;
+                border-radius: 21px;
+            }
+
+            .container::before {
+                left: 25px;
+                right: 25px;
+            }
+
+            .icon {
+                width: 66px;
+                height: 66px;
+                border-radius: 19px;
+                font-size: 28px;
+                margin-bottom: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .header {
+                margin-bottom: 26px;
+            }
+
+            .form-group {
+                margin-bottom: 17px;
+            }
+
+            input {
+                height: 49px;
+            }
+
+            .create-btn {
+                height: 51px;
+            }
+        }
+
+        @media (max-width: 360px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 29px 16px 23px;
+                border-radius: 18px;
+            }
+
+            .container::before {
+                left: 20px;
+                right: 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .header p {
+                font-size: 13px;
+            }
+
+            label {
+                font-size: 12.5px;
+            }
+
+            input {
+                font-size: 14px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+
+            <div class="icon">👤</div>
+
+            <h1 id="signupTitle">
+                Create Account
+            </h1>
+
+            <p id="signupDescription">
+                Create your account to continue.
+            </p>
+
+        </div>
+
+
+        <form onsubmit="createAccount(event)">
+
+            <div class="form-group">
+
+                <label for="fullName" id="fullNameLabel">
+                    Full Name
+                </label>
+
+                <input
+                    class="normal-input"
+                    type="text"
+                    id="fullName"
+                    placeholder="Enter your full name"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email" id="emailLabel">
+                    Email Address
+                </label>
+
+                <input
+                    class="normal-input"
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email address"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password" id="passwordLabel">
+                    Password
+                </label>
+
+                <div class="password-box">
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Create a password"
+                        minlength="6"
+                        required>
+
+                    <button
+                        type="button"
+                        class="eye-btn"
+                        id="passwordEye"
+                        onclick="togglePassword('password', 'passwordEye')"
+                        aria-label="Show password">
+
+                        👁
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="confirmPassword" id="confirmPasswordLabel">
+                    Confirm Password
+                </label>
+
+                <div class="password-box">
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm your password"
+                        minlength="6"
+                        required>
+
+                    <button
+                        type="button"
+                        class="eye-btn"
+                        id="confirmPasswordEye"
+                        onclick="togglePassword('confirmPassword', 'confirmPasswordEye')"
+                        aria-label="Show password">
+
+                        👁
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="create-btn"
+                id="createAccountButton">
+
+                Create Account
+
+            </button>
+
+        </form>
+
+
+        <div class="login-link">
+
+            <span id="alreadyAccountText">
+                Already have an account?
+            </span>
+
+            <a href="login.html" id="loginLink">
+                Login
+            </a>
+
+        </div>
+
+
+        <div class="footer" id="footerText">
+            Your account information will be saved.
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const translations = {
+
+            en: {
+                title: "Create Account",
+                description: "Create your account to continue.",
+                fullName: "Full Name",
+                fullNamePlaceholder: "Enter your full name",
+                email: "Email Address",
+                emailPlaceholder: "Enter your email address",
+                password: "Password",
+                passwordPlaceholder: "Create a password",
+                confirmPassword: "Confirm Password",
+                confirmPasswordPlaceholder: "Confirm your password",
+                createAccount: "Create Account",
+                alreadyAccount: "Already have an account?",
+                login: "Login",
+                footer: "Your account information will be saved.",
+                showPassword: "Show password",
+                hidePassword: "Hide password",
+                passwordMismatch: "Passwords do not match."
+            },
+
+            es: {
+                title: "Crear cuenta",
+                description: "Crea tu cuenta para continuar.",
+                fullName: "Nombre completo",
+                fullNamePlaceholder: "Ingresa tu nombre completo",
+                email: "Dirección de correo electrónico",
+                emailPlaceholder: "Ingresa tu dirección de correo electrónico",
+                password: "Contraseña",
+                passwordPlaceholder: "Crea una contraseña",
+                confirmPassword: "Confirmar contraseña",
+                confirmPasswordPlaceholder: "Confirma tu contraseña",
+                createAccount: "Crear cuenta",
+                alreadyAccount: "¿Ya tienes una cuenta?",
+                login: "Iniciar sesión",
+                footer: "La información de tu cuenta se guardará.",
+                showPassword: "Mostrar contraseña",
+                hidePassword: "Ocultar contraseña",
+                passwordMismatch: "Las contraseñas no coinciden."
+            },
+
+            fr: {
+                title: "Créer un compte",
+                description: "Créez votre compte pour continuer.",
+                fullName: "Nom complet",
+                fullNamePlaceholder: "Entrez votre nom complet",
+                email: "Adresse e-mail",
+                emailPlaceholder: "Entrez votre adresse e-mail",
+                password: "Mot de passe",
+                passwordPlaceholder: "Créez un mot de passe",
+                confirmPassword: "Confirmer le mot de passe",
+                confirmPasswordPlaceholder: "Confirmez votre mot de passe",
+                createAccount: "Créer un compte",
+                alreadyAccount: "Vous avez déjà un compte ?",
+                login: "Connexion",
+                footer: "Les informations de votre compte seront enregistrées.",
+                showPassword: "Afficher le mot de passe",
+                hidePassword: "Masquer le mot de passe",
+                passwordMismatch: "Les mots de passe ne correspondent pas."
+            },
+
+            de: {
+                title: "Konto erstellen",
+                description: "Erstellen Sie Ihr Konto, um fortzufahren.",
+                fullName: "Vollständiger Name",
+                fullNamePlaceholder: "Geben Sie Ihren vollständigen Namen ein",
+                email: "E-Mail-Adresse",
+                emailPlaceholder: "Geben Sie Ihre E-Mail-Adresse ein",
+                password: "Passwort",
+                passwordPlaceholder: "Erstellen Sie ein Passwort",
+                confirmPassword: "Passwort bestätigen",
+                confirmPasswordPlaceholder: "Bestätigen Sie Ihr Passwort",
+                createAccount: "Konto erstellen",
+                alreadyAccount: "Sie haben bereits ein Konto?",
+                login: "Anmelden",
+                footer: "Ihre Kontoinformationen werden gespeichert.",
+                showPassword: "Passwort anzeigen",
+                hidePassword: "Passwort ausblenden",
+                passwordMismatch: "Die Passwörter stimmen nicht überein."
+            },
+
+            pt: {
+                title: "Criar conta",
+                description: "Crie sua conta para continuar.",
+                fullName: "Nome completo",
+                fullNamePlaceholder: "Digite seu nome completo",
+                email: "Endereço de e-mail",
+                emailPlaceholder: "Digite seu endereço de e-mail",
+                password: "Senha",
+                passwordPlaceholder: "Crie uma senha",
+                confirmPassword: "Confirmar senha",
+                confirmPasswordPlaceholder: "Confirme sua senha",
+                createAccount: "Criar conta",
+                alreadyAccount: "Já tem uma conta?",
+                login: "Entrar",
+                footer: "As informações da sua conta serão salvas.",
+                showPassword: "Mostrar senha",
+                hidePassword: "Ocultar senha",
+                passwordMismatch: "As senhas não coincidem."
+            },
+
+            it: {
+                title: "Crea account",
+                description: "Crea il tuo account per continuare.",
+                fullName: "Nome completo",
+                fullNamePlaceholder: "Inserisci il tuo nome completo",
+                email: "Indirizzo e-mail",
+                emailPlaceholder: "Inserisci il tuo indirizzo e-mail",
+                password: "Password",
+                passwordPlaceholder: "Crea una password",
+                confirmPassword: "Conferma password",
+                confirmPasswordPlaceholder: "Conferma la tua password",
+                createAccount: "Crea account",
+                alreadyAccount: "Hai già un account?",
+                login: "Accedi",
+                footer: "Le informazioni del tuo account verranno salvate.",
+                showPassword: "Mostra password",
+                hidePassword: "Nascondi password",
+                passwordMismatch: "Le password non corrispondono."
+            },
+
+            nl: {
+                title: "Account aanmaken",
+                description: "Maak je account aan om door te gaan.",
+                fullName: "Volledige naam",
+                fullNamePlaceholder: "Voer je volledige naam in",
+                email: "E-mailadres",
+                emailPlaceholder: "Voer je e-mailadres in",
+                password: "Wachtwoord",
+                passwordPlaceholder: "Maak een wachtwoord aan",
+                confirmPassword: "Wachtwoord bevestigen",
+                confirmPasswordPlaceholder: "Bevestig je wachtwoord",
+                createAccount: "Account aanmaken",
+                alreadyAccount: "Heb je al een account?",
+                login: "Inloggen",
+                footer: "Je accountgegevens worden opgeslagen.",
+                showPassword: "Wachtwoord tonen",
+                hidePassword: "Wachtwoord verbergen",
+                passwordMismatch: "De wachtwoorden komen niet overeen."
+            },
+
+            sv: {
+                title: "Skapa konto",
+                description: "Skapa ditt konto för att fortsätta.",
+                fullName: "Fullständigt namn",
+                fullNamePlaceholder: "Ange ditt fullständiga namn",
+                email: "E-postadress",
+                emailPlaceholder: "Ange din e-postadress",
+                password: "Lösenord",
+                passwordPlaceholder: "Skapa ett lösenord",
+                confirmPassword: "Bekräfta lösenord",
+                confirmPasswordPlaceholder: "Bekräfta ditt lösenord",
+                createAccount: "Skapa konto",
+                alreadyAccount: "Har du redan ett konto?",
+                login: "Logga in",
+                footer: "Din kontoinformation kommer att sparas.",
+                showPassword: "Visa lösenord",
+                hidePassword: "Dölj lösenord",
+                passwordMismatch: "Lösenorden matchar inte."
+            },
+
+            no: {
+                title: "Opprett konto",
+                description: "Opprett kontoen din for å fortsette.",
+                fullName: "Fullt navn",
+                fullNamePlaceholder: "Skriv inn ditt fulle navn",
+                email: "E-postadresse",
+                emailPlaceholder: "Skriv inn e-postadressen din",
+                password: "Passord",
+                passwordPlaceholder: "Opprett et passord",
+                confirmPassword: "Bekreft passord",
+                confirmPasswordPlaceholder: "Bekreft passordet ditt",
+                createAccount: "Opprett konto",
+                alreadyAccount: "Har du allerede en konto?",
+                login: "Logg inn",
+                footer: "Kontoinformasjonen din blir lagret.",
+                showPassword: "Vis passord",
+                hidePassword: "Skjul passord",
+                passwordMismatch: "Passordene samsvarer ikke."
+            },
+
+            da: {
+                title: "Opret konto",
+                description: "Opret din konto for at fortsætte.",
+                fullName: "Fulde navn",
+                fullNamePlaceholder: "Indtast dit fulde navn",
+                email: "E-mailadresse",
+                emailPlaceholder: "Indtast din e-mailadresse",
+                password: "Adgangskode",
+                passwordPlaceholder: "Opret en adgangskode",
+                confirmPassword: "Bekræft adgangskode",
+                confirmPasswordPlaceholder: "Bekræft din adgangskode",
+                createAccount: "Opret konto",
+                alreadyAccount: "Har du allerede en konto?",
+                login: "Log ind",
+                footer: "Dine kontooplysninger bliver gemt.",
+                showPassword: "Vis adgangskode",
+                hidePassword: "Skjul adgangskode",
+                passwordMismatch: "Adgangskoderne matcher ikke."
+            },
+
+            fi: {
+                title: "Luo tili",
+                description: "Luo tilisi jatkaaksesi.",
+                fullName: "Koko nimi",
+                fullNamePlaceholder: "Anna koko nimesi",
+                email: "Sähköpostiosoite",
+                emailPlaceholder: "Anna sähköpostiosoitteesi",
+                password: "Salasana",
+                passwordPlaceholder: "Luo salasana",
+                confirmPassword: "Vahvista salasana",
+                confirmPasswordPlaceholder: "Vahvista salasanasi",
+                createAccount: "Luo tili",
+                alreadyAccount: "Onko sinulla jo tili?",
+                login: "Kirjaudu",
+                footer: "Tilisi tiedot tallennetaan.",
+                showPassword: "Näytä salasana",
+                hidePassword: "Piilota salasana",
+                passwordMismatch: "Salasanat eivät täsmää."
+            },
+
+            pl: {
+                title: "Utwórz konto",
+                description: "Utwórz konto, aby kontynuować.",
+                fullName: "Imię i nazwisko",
+                fullNamePlaceholder: "Wpisz swoje imię i nazwisko",
+                email: "Adres e-mail",
+                emailPlaceholder: "Wpisz swój adres e-mail",
+                password: "Hasło",
+                passwordPlaceholder: "Utwórz hasło",
+                confirmPassword: "Potwierdź hasło",
+                confirmPasswordPlaceholder: "Potwierdź swoje hasło",
+                createAccount: "Utwórz konto",
+                alreadyAccount: "Masz już konto?",
+                login: "Zaloguj się",
+                footer: "Informacje o Twoim koncie zostaną zapisane.",
+                showPassword: "Pokaż hasło",
+                hidePassword: "Ukryj hasło",
+                passwordMismatch: "Hasła nie są takie same."
+            },
+
+            el: {
+                title: "Δημιουργία λογαριασμού",
+                description: "Δημιουργήστε τον λογαριασμό σας για να συνεχίσετε.",
+                fullName: "Ονοματεπώνυμο",
+                fullNamePlaceholder: "Εισαγάγετε το ονοματεπώνυμό σας",
+                email: "Διεύθυνση email",
+                emailPlaceholder: "Εισαγάγετε τη διεύθυνση email σας",
+                password: "Κωδικός πρόσβασης",
+                passwordPlaceholder: "Δημιουργήστε έναν κωδικό πρόσβασης",
+                confirmPassword: "Επιβεβαίωση κωδικού πρόσβασης",
+                confirmPasswordPlaceholder: "Επιβεβαιώστε τον κωδικό πρόσβασής σας",
+                createAccount: "Δημιουργία λογαριασμού",
+                alreadyAccount: "Έχετε ήδη λογαριασμό;",
+                login: "Σύνδεση",
+                footer: "Τα στοιχεία του λογαριασμού σας θα αποθηκευτούν.",
+                showPassword: "Εμφάνιση κωδικού πρόσβασης",
+                hidePassword: "Απόκρυψη κωδικού πρόσβασης",
+                passwordMismatch: "Οι κωδικοί πρόσβασης δεν ταιριάζουν."
+            }
+
+        };
+
+
+        let currentLanguage =
+            localStorage.getItem("language") || "en";
+
+
+        if (!translations[currentLanguage]) {
+            currentLanguage = "en";
+        }
+
+
+        function applyLanguage() {
+
+            const t =
+                translations[currentLanguage];
+
+
+            document.documentElement.lang =
+                currentLanguage;
+
+
+            document.title =
+                t.title;
+
+
+            document.getElementById("signupTitle")
+                .textContent = t.title;
+
+
+            document.getElementById("signupDescription")
+                .textContent = t.description;
+
+
+            document.getElementById("fullNameLabel")
+                .textContent = t.fullName;
+
+
+            document.getElementById("fullName")
+                .placeholder = t.fullNamePlaceholder;
+
+
+            document.getElementById("emailLabel")
+                .textContent = t.email;
+
+
+            document.getElementById("email")
+                .placeholder = t.emailPlaceholder;
+
+
+            document.getElementById("passwordLabel")
+                .textContent = t.password;
+
+
+            document.getElementById("password")
+                .placeholder = t.passwordPlaceholder;
+
+
+            document.getElementById("confirmPasswordLabel")
+                .textContent = t.confirmPassword;
+
+
+            document.getElementById("confirmPassword")
+                .placeholder = t.confirmPasswordPlaceholder;
+
+
+            document.getElementById("createAccountButton")
+                .textContent = t.createAccount;
+
+
+            document.getElementById("alreadyAccountText")
+                .textContent = t.alreadyAccount;
+
+
+            document.getElementById("loginLink")
+                .textContent = t.login;
+
+
+            document.getElementById("footerText")
+                .textContent = t.footer;
+
+
+            updateEyeButton(
+                "password",
+                "passwordEye"
+            );
+
+
+            updateEyeButton(
+                "confirmPassword",
+                "confirmPasswordEye"
+            );
+        }
+
+
+        function togglePassword(
+            inputId,
+            buttonId
+        ) {
+
+            const input =
+                document.getElementById(inputId);
+
+
+            if (input.type === "password") {
+
+                input.type = "text";
+
+            } else {
+
+                input.type = "password";
+            }
+
+
+            updateEyeButton(
+                inputId,
+                buttonId
+            );
+        }
+
+
+        function updateEyeButton(
+            inputId,
+            buttonId
+        ) {
+
+            const input =
+                document.getElementById(inputId);
+
+            const button =
+                document.getElementById(buttonId);
+
+            const t =
+                translations[currentLanguage];
+
+
+            if (input.type === "password") {
+
+                button.textContent = "👁";
+
+                button.setAttribute(
+                    "aria-label",
+                    t.showPassword
+                );
+
+            } else {
+
+                button.textContent = "🙈";
+
+                button.setAttribute(
+                    "aria-label",
+                    t.hidePassword
+                );
+            }
+        }
+
+
+        function createAccount(event) {
+
+            event.preventDefault();
+
+
+            const fullName =
+                document.getElementById("fullName")
+                    .value
+                    .trim();
+
+
+            const email =
+                document.getElementById("email")
+                    .value
+                    .trim();
+
+
+            const password =
+                document.getElementById("password")
+                    .value;
+
+
+            const confirmPassword =
+                document.getElementById("confirmPassword")
+                    .value;
+
+
+            const t =
+                translations[currentLanguage];
+
+
+            if (password !== confirmPassword) {
+
+                alert(t.passwordMismatch);
+
+                return;
+            }
+
+
+            localStorage.setItem(
+                "demoAccount",
+                JSON.stringify({
+                    name: fullName,
+                    email: email,
+                    password: password
+                })
+            );
+
+
+            localStorage.setItem(
+                "loggedIn",
+                "true"
+            );
+
+
+            window.location.href =
+                "dashboard.html";
+        }
+
+
+        applyLanguage();
+
+    </script>
+
+</body>
+
+</html>

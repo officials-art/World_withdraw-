@@ -1,0 +1,1397 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Select Country</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --navy: #0f172a;
+        --text: #172554;
+        --muted: #64748b;
+        --border: #e2e8f0;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        min-height: 100vh;
+        background:
+            radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.30), transparent 28%),
+            radial-gradient(circle at 90% 90%, rgba(14, 165, 233, 0.22), transparent 30%),
+            linear-gradient(135deg, #020617, #0f172a 48%, #1e40af);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 560px;
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 28px;
+        padding: 36px;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow:
+            0 35px 90px rgba(0, 0, 0, 0.38),
+            0 10px 30px rgba(0, 0, 0, 0.12);
+        animation: appear 0.45s ease;
+    }
+
+    @keyframes appear {
+        from {
+            opacity: 0;
+            transform: translateY(18px) scale(0.98);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 27px;
+    }
+
+    .icon {
+        width: 78px;
+        height: 78px;
+        margin: 0 auto 17px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 37px;
+        background: linear-gradient(145deg, #eff6ff, #dbeafe);
+        border: 1px solid #bfdbfe;
+        box-shadow: 0 12px 30px rgba(37, 99, 235, 0.15);
+    }
+
+    .header h1 {
+        color: #0f172a;
+        font-size: 30px;
+        font-weight: 800;
+        letter-spacing: -0.8px;
+        margin-bottom: 8px;
+    }
+
+    .header p {
+        color: var(--muted);
+        max-width: 430px;
+        margin: auto;
+        font-size: 14px;
+        line-height: 1.65;
+    }
+
+    .selected-country {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 17px;
+        margin-bottom: 14px;
+        border-radius: 19px;
+        background: linear-gradient(135deg, #eff6ff, #ffffff);
+        border: 1px solid #bfdbfe;
+        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+    }
+
+    .selected-country .flag {
+        width: 52px;
+        height: 52px;
+        flex-shrink: 0;
+        border-radius: 15px;
+        background: #ffffff;
+        border: 1px solid #dbeafe;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 29px;
+        box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+    }
+
+    .selected-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .selected-label {
+        color: #64748b;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 4px;
+    }
+
+    .selected-name {
+        color: #0f172a;
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .change-btn {
+        border: none;
+        background: #2563eb;
+        color: #ffffff;
+        padding: 10px 15px;
+        border-radius: 11px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+        box-shadow: 0 6px 15px rgba(37, 99, 235, 0.18);
+        transition: 0.2s ease;
+    }
+
+    .change-btn:hover {
+        background: #1d4ed8;
+        transform: translateY(-1px);
+    }
+
+    .country-selector {
+        display: none;
+    }
+
+    .country-selector.active {
+        display: block;
+        animation: reveal 0.25s ease;
+    }
+
+    @keyframes reveal {
+        from {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .search-box {
+        position: relative;
+        margin: 16px 0 12px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 17px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 17px;
+        pointer-events: none;
+    }
+
+    .search-box input {
+        width: 100%;
+        height: 53px;
+        border: 1px solid #cbd5e1;
+        border-radius: 15px;
+        outline: none;
+        background: #f8fafc;
+        color: #0f172a;
+        padding: 0 16px 0 47px;
+        font-size: 14px;
+        transition: 0.2s ease;
+    }
+
+    .search-box input::placeholder {
+        color: #94a3b8;
+    }
+
+    .search-box input:focus {
+        background: #ffffff;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+    }
+
+    .country-list {
+        max-height: 355px;
+        overflow-y: auto;
+        display: grid;
+        gap: 8px;
+        padding: 3px 4px 3px 1px;
+        scrollbar-width: thin;
+        scrollbar-color: #cbd5e1 transparent;
+    }
+
+    .country-list::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .country-list::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+    }
+
+    .country {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        min-height: 67px;
+        padding: 10px 13px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .country:hover {
+        border-color: #93c5fd;
+        background: #f8fbff;
+        transform: translateY(-1px);
+        box-shadow: 0 7px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    .country.selected {
+        border-color: #2563eb;
+        background: linear-gradient(135deg, #eff6ff, #ffffff);
+        box-shadow:
+            0 0 0 2px rgba(37, 99, 235, 0.08),
+            0 7px 18px rgba(37, 99, 235, 0.08);
+    }
+
+    .country.hidden {
+        display: none;
+    }
+
+    .country .flag {
+        width: 45px;
+        height: 45px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 13px;
+        font-size: 26px;
+    }
+
+    .country-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .country-name {
+        color: #172554;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .country-language {
+        color: #64748b;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .check {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        border: 2px solid #cbd5e1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: transparent;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .country.selected .check {
+        background: #2563eb;
+        border-color: #2563eb;
+        color: #ffffff;
+    }
+
+    .no-results {
+        text-align: center;
+        color: #64748b;
+        padding: 28px 10px;
+        display: none;
+        font-size: 13px;
+    }
+
+    .continue-btn {
+        width: 100%;
+        height: 55px;
+        border: none;
+        border-radius: 15px;
+        margin-top: 20px;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.24);
+        transition: 0.2s ease;
+    }
+
+    .continue-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(37, 99, 235, 0.30);
+    }
+
+    .continue-btn:active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    .continue-btn:disabled {
+        background: #cbd5e1;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+
+    .footer {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 11px;
+        margin-top: 16px;
+    }
+
+    @media (max-width: 600px) {
+
+        body {
+            padding: 12px;
+        }
+
+        .container {
+            padding: 28px 17px 22px;
+            border-radius: 23px;
+        }
+
+        .header {
+            margin-bottom: 23px;
+        }
+
+        .icon {
+            width: 66px;
+            height: 66px;
+            border-radius: 20px;
+            font-size: 30px;
+        }
+
+        .header h1 {
+            font-size: 25px;
+        }
+
+        .header p {
+            font-size: 13px;
+        }
+
+        .selected-country {
+            padding: 14px;
+        }
+
+        .selected-country .flag {
+            width: 47px;
+            height: 47px;
+            font-size: 26px;
+        }
+
+        .selected-name {
+            font-size: 15px;
+        }
+
+        .change-btn {
+            padding: 9px 12px;
+        }
+
+        .country-list {
+            max-height: 340px;
+        }
+    }
+
+    @media (max-width: 390px) {
+
+        .container {
+            padding: 24px 13px 19px;
+        }
+
+        .header h1 {
+            font-size: 23px;
+        }
+
+        .header p {
+            font-size: 12px;
+        }
+
+        .selected-country {
+            gap: 10px;
+        }
+
+        .change-btn {
+            padding: 8px 10px;
+            font-size: 11px;
+        }
+
+        .country {
+            min-height: 63px;
+            padding: 9px 10px;
+        }
+
+        .country .flag {
+            width: 41px;
+            height: 41px;
+            font-size: 24px;
+        }
+    }
+</style>
+
+</head><body><div class="container"><div class="header">
+
+    <div class="icon">🌎</div>
+
+    <h1 id="pageTitle">Select Country</h1>
+
+    <p id="pageDescription">
+        Choose your country to continue.
+        Your selection will help us set up the appropriate language.
+    </p>
+
+</div>
+
+
+<div class="selected-country">
+
+    <div class="flag" id="selectedCountryFlag">
+        🇺🇸
+    </div>
+
+    <div class="selected-details">
+
+        <div class="selected-label" id="selectedLabel">
+            Selected Country
+        </div>
+
+        <div class="selected-name" id="selectedCountryName">
+            United States
+        </div>
+
+    </div>
+
+    <button
+        type="button"
+        class="change-btn"
+        id="changeBtn"
+        onclick="showAllCountries()">
+        Change
+    </button>
+
+</div>
+
+
+<div class="country-selector" id="countrySelector">
+
+    <div class="search-box">
+
+        <span class="search-icon">🔍</span>
+
+        <input
+            type="text"
+            id="countrySearch"
+            placeholder="Search country..."
+            autocomplete="off"
+            aria-label="Search country">
+
+    </div>
+
+
+    <div class="country-list" id="countryList">
+
+
+        <div class="country hidden"
+             data-country="Canada"
+             data-language="en"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇨🇦</div>
+
+            <div class="country-info">
+                <div class="country-name">Canada</div>
+                <div class="country-language">English</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country"
+             data-country="United States"
+             data-language="en"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇺🇸</div>
+
+            <div class="country-info">
+                <div class="country-name">United States</div>
+                <div class="country-language">English</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Mexico"
+             data-language="es"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇲🇽</div>
+
+            <div class="country-info">
+                <div class="country-name">Mexico</div>
+                <div class="country-language">Spanish</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Argentina"
+             data-language="es"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇦🇷</div>
+
+            <div class="country-info">
+                <div class="country-name">Argentina</div>
+                <div class="country-language">Spanish</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Brazil"
+             data-language="pt"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇧🇷</div>
+
+            <div class="country-info">
+                <div class="country-name">Brazil</div>
+                <div class="country-language">Portuguese</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="United Kingdom"
+             data-language="en"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇬🇧</div>
+
+            <div class="country-info">
+                <div class="country-name">United Kingdom</div>
+                <div class="country-language">English</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Ireland"
+             data-language="en"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇮🇪</div>
+
+            <div class="country-info">
+                <div class="country-name">Ireland</div>
+                <div class="country-language">English</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="France"
+             data-language="fr"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇫🇷</div>
+
+            <div class="country-info">
+                <div class="country-name">France</div>
+                <div class="country-language">French</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Germany"
+             data-language="de"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇩🇪</div>
+
+            <div class="country-info">
+                <div class="country-name">Germany</div>
+                <div class="country-language">German</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Spain"
+             data-language="es"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇪🇸</div>
+
+            <div class="country-info">
+                <div class="country-name">Spain</div>
+                <div class="country-language">Spanish</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Italy"
+             data-language="it"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇮🇹</div>
+
+            <div class="country-info">
+                <div class="country-name">Italy</div>
+                <div class="country-language">Italian</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Portugal"
+             data-language="pt"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇵🇹</div>
+
+            <div class="country-info">
+                <div class="country-name">Portugal</div>
+                <div class="country-language">Portuguese</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Netherlands"
+             data-language="nl"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇳🇱</div>
+
+            <div class="country-info">
+                <div class="country-name">Netherlands</div>
+                <div class="country-language">Dutch</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Belgium"
+             data-language="nl"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇧🇪</div>
+
+            <div class="country-info">
+                <div class="country-name">Belgium</div>
+                <div class="country-language">Dutch</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Switzerland"
+             data-language="de"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇨🇭</div>
+
+            <div class="country-info">
+                <div class="country-name">Switzerland</div>
+                <div class="country-language">German</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Austria"
+             data-language="de"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇦🇹</div>
+
+            <div class="country-info">
+                <div class="country-name">Austria</div>
+                <div class="country-language">German</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Sweden"
+             data-language="sv"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇸🇪</div>
+
+            <div class="country-info">
+                <div class="country-name">Sweden</div>
+                <div class="country-language">Swedish</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Norway"
+             data-language="no"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇳🇴</div>
+
+            <div class="country-info">
+                <div class="country-name">Norway</div>
+                <div class="country-language">Norwegian</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Denmark"
+             data-language="da"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇩🇰</div>
+
+            <div class="country-info">
+                <div class="country-name">Denmark</div>
+                <div class="country-language">Danish</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Finland"
+             data-language="fi"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇫🇮</div>
+
+            <div class="country-info">
+                <div class="country-name">Finland</div>
+                <div class="country-language">Finnish</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Poland"
+             data-language="pl"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇵🇱</div>
+
+            <div class="country-info">
+                <div class="country-name">Poland</div>
+                <div class="country-language">Polish</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Greece"
+             data-language="el"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇬🇷</div>
+
+            <div class="country-info">
+                <div class="country-name">Greece</div>
+                <div class="country-language">Greek</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="Australia"
+             data-language="en"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇦🇺</div>
+
+            <div class="country-info">
+                <div class="country-name">Australia</div>
+                <div class="country-language">English</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+
+        <div class="country hidden"
+             data-country="New Zealand"
+             data-language="en"
+             onclick="selectCountry(this)">
+
+            <div class="flag">🇳🇿</div>
+
+            <div class="country-info">
+                <div class="country-name">New Zealand</div>
+                <div class="country-language">English</div>
+            </div>
+
+            <div class="check">✓</div>
+
+        </div>
+
+    </div>
+
+
+    <div class="no-results" id="noResults">
+        No country found.
+    </div>
+
+</div>
+
+
+<button
+    class="continue-btn"
+    id="continueBtn"
+    onclick="continueToLanguage()"
+    disabled>
+    Continue
+</button>
+
+
+<div class="footer" id="footerText">
+    Your country selection will be saved.
+</div>
+
+</div><script>
+
+    let selectedCountry = "";
+    let selectedLanguage = "";
+
+    const searchInput =
+        document.getElementById("countrySearch");
+
+    const noResults =
+        document.getElementById("noResults");
+
+    const countries =
+        document.querySelectorAll(".country");
+
+
+    /*
+     * INTERFACE TRANSLATIONS
+     */
+
+    const translations = {
+
+        en: {
+            title: "Select Country",
+            description: "Choose your country to continue. Your selection will help us set up the appropriate language.",
+            selected: "Selected Country",
+            change: "Change",
+            search: "Search country...",
+            noResults: "No country found.",
+            continue: "Continue",
+            footer: "Your country selection will be saved."
+        },
+
+        es: {
+            title: "Seleccionar país",
+            description: "Elige tu país para continuar. Tu selección nos ayudará a configurar el idioma apropiado.",
+            selected: "País seleccionado",
+            change: "Cambiar",
+            search: "Buscar país...",
+            noResults: "No se encontró ningún país.",
+            continue: "Continuar",
+            footer: "Tu selección de país se guardará."
+        },
+
+        fr: {
+            title: "Sélectionner un pays",
+            description: "Choisissez votre pays pour continuer. Votre sélection nous aidera à définir la langue appropriée.",
+            selected: "Pays sélectionné",
+            change: "Modifier",
+            search: "Rechercher un pays...",
+            noResults: "Aucun pays trouvé.",
+            continue: "Continuer",
+            footer: "Votre sélection de pays sera enregistrée."
+        },
+
+        de: {
+            title: "Land auswählen",
+            description: "Wählen Sie Ihr Land aus, um fortzufahren. Ihre Auswahl hilft uns, die passende Sprache einzustellen.",
+            selected: "Ausgewähltes Land",
+            change: "Ändern",
+            search: "Land suchen...",
+            noResults: "Kein Land gefunden.",
+            continue: "Weiter",
+            footer: "Ihre Länderauswahl wird gespeichert."
+        },
+
+        pt: {
+            title: "Selecionar país",
+            description: "Escolha o seu país para continuar. A sua seleção ajudará a configurar o idioma adequado.",
+            selected: "País selecionado",
+            change: "Alterar",
+            search: "Pesquisar país...",
+            noResults: "Nenhum país encontrado.",
+            continue: "Continuar",
+            footer: "A sua seleção de país será guardada."
+        },
+
+        it: {
+            title: "Seleziona paese",
+            description: "Scegli il tuo paese per continuare. La tua selezione ci aiuterà a impostare la lingua appropriata.",
+            selected: "Paese selezionato",
+            change: "Cambia",
+            search: "Cerca paese...",
+            noResults: "Nessun paese trovato.",
+            continue: "Continua",
+            footer: "La selezione del paese verrà salvata."
+        },
+
+        nl: {
+            title: "Land selecteren",
+            description: "Kies je land om door te gaan. Je keuze helpt ons de juiste taal in te stellen.",
+            selected: "Geselecteerd land",
+            change: "Wijzigen",
+            search: "Land zoeken...",
+            noResults: "Geen land gevonden.",
+            continue: "Doorgaan",
+            footer: "Je landkeuze wordt opgeslagen."
+        },
+
+        sv: {
+            title: "Välj land",
+            description: "Välj ditt land för att fortsätta. Ditt val hjälper oss att ställa in rätt språk.",
+            selected: "Valt land",
+            change: "Ändra",
+            search: "Sök land...",
+            noResults: "Inget land hittades.",
+            continue: "Fortsätt",
+            footer: "Ditt landval kommer att sparas."
+        },
+
+        no: {
+            title: "Velg land",
+            description: "Velg landet ditt for å fortsette. Valget ditt hjelper oss med å angi riktig språk.",
+            selected: "Valgt land",
+            change: "Endre",
+            search: "Søk etter land...",
+            noResults: "Ingen land funnet.",
+            continue: "Fortsett",
+            footer: "Valget ditt av land blir lagret."
+        },
+
+        da: {
+            title: "Vælg land",
+            description: "Vælg dit land for at fortsætte. Dit valg hjælper os med at indstille det rigtige sprog.",
+            selected: "Valgt land",
+            change: "Skift",
+            search: "Søg efter land...",
+            noResults: "Intet land fundet.",
+            continue: "Fortsæt",
+            footer: "Dit landevalg bliver gemt."
+        },
+
+        fi: {
+            title: "Valitse maa",
+            description: "Valitse maasi jatkaaksesi. Valintasi auttaa meitä määrittämään oikean kielen.",
+            selected: "Valittu maa",
+            change: "Vaihda",
+            search: "Hae maata...",
+            noResults: "Maata ei löytynyt.",
+            continue: "Jatka",
+            footer: "Maan valintasi tallennetaan."
+        },
+
+        pl: {
+            title: "Wybierz kraj",
+            description: "Wybierz swój kraj, aby kontynuować. Twój wybór pomoże nam ustawić odpowiedni język.",
+            selected: "Wybrany kraj",
+            change: "Zmień",
+            search: "Szukaj kraju...",
+            noResults: "Nie znaleziono kraju.",
+            continue: "Kontynuuj",
+            footer: "Twój wybór kraju zostanie zapisany."
+        },
+
+        el: {
+            title: "Επιλέξτε χώρα",
+            description: "Επιλέξτε τη χώρα σας για να συνεχίσετε. Η επιλογή σας θα μας βοηθήσει να ρυθμίσουμε την κατάλληλη γλώσσα.",
+            selected: "Επιλεγμένη χώρα",
+            change: "Αλλαγή",
+            search: "Αναζήτηση χώρας...",
+            noResults: "Δεν βρέθηκε χώρα.",
+            continue: "Συνέχεια",
+            footer: "Η επιλογή χώρας σας θα αποθηκευτεί."
+        }
+
+    };
+
+
+    /*
+     * UPDATE PAGE LANGUAGE
+     */
+
+    function updateInterfaceLanguage(language) {
+
+        const t =
+            translations[language] ||
+            translations.en;
+
+        document.getElementById(
+            "pageTitle"
+        ).textContent = t.title;
+
+        document.getElementById(
+            "pageDescription"
+        ).textContent = t.description;
+
+        document.getElementById(
+            "selectedLabel"
+        ).textContent = t.selected;
+
+        document.getElementById(
+            "changeBtn"
+        ).textContent = t.change;
+
+        searchInput.placeholder =
+            t.search;
+
+        searchInput.setAttribute(
+            "aria-label",
+            t.search
+        );
+
+        noResults.textContent =
+            t.noResults;
+
+        document.getElementById(
+            "continueBtn"
+        ).textContent = t.continue;
+
+        document.getElementById(
+            "footerText"
+        ).textContent = t.footer;
+
+        document.documentElement.lang =
+            language;
+    }
+
+
+    /*
+     * SHOW ALL COUNTRIES
+     */
+
+    function showAllCountries() {
+
+        document
+            .getElementById("countrySelector")
+            .classList.add("active");
+
+        countries.forEach(country => {
+            country.classList.remove("hidden");
+            country.style.display = "flex";
+        });
+
+        noResults.style.display = "none";
+
+        searchInput.value = "";
+
+        setTimeout(function () {
+            searchInput.focus();
+        }, 100);
+
+    }
+
+
+    /*
+     * SELECT COUNTRY
+     */
+
+    function selectCountry(element) {
+
+        document
+            .querySelectorAll(".country")
+            .forEach(country => {
+                country.classList.remove("selected");
+            });
+
+        element.classList.add("selected");
+
+        selectedCountry =
+            element.dataset.country;
+
+        selectedLanguage =
+            element.dataset.language;
+
+        document.getElementById(
+            "selectedCountryName"
+        ).textContent =
+            selectedCountry;
+
+        document.getElementById(
+            "selectedCountryFlag"
+        ).textContent =
+            element.querySelector(".flag").textContent;
+
+        document.getElementById(
+            "continueBtn"
+        ).disabled = false;
+
+        /*
+         * Immediately change the
+         * interface to the country's
+         * default language.
+         */
+
+        updateInterfaceLanguage(
+            selectedLanguage
+        );
+
+    }
+
+
+    /*
+     * CONTINUE TO LANGUAGE PAGE
+     */
+
+    function continueToLanguage() {
+
+        if (!selectedCountry) {
+            return;
+        }
+
+        localStorage.setItem(
+            "selectedCountry",
+            selectedCountry
+        );
+
+        localStorage.setItem(
+            "language",
+            selectedLanguage
+        );
+
+        window.location.href =
+            "language.html";
+    }
+
+
+    /*
+     * COUNTRY SEARCH
+     */
+
+    searchInput.addEventListener(
+        "input",
+        function () {
+
+            const searchTerm =
+                this.value.toLowerCase().trim();
+
+            let visibleCount = 0;
+
+            countries.forEach(country => {
+
+                const name =
+                    country
+                        .querySelector(".country-name")
+                        .textContent
+                        .toLowerCase();
+
+                if (name.includes(searchTerm)) {
+
+                    country.style.display = "flex";
+                    country.classList.remove("hidden");
+
+                    visibleCount++;
+
+                } else {
+
+                    country.style.display = "none";
+
+                }
+
+            });
+
+            noResults.style.display =
+                visibleCount === 0
+                    ? "block"
+                    : "none";
+
+        }
+    );
+
+
+    /*
+     * RESTORE PREVIOUSLY SELECTED COUNTRY
+     */
+
+    const savedCountry =
+        localStorage.getItem("selectedCountry");
+
+
+    if (savedCountry) {
+
+        countries.forEach(country => {
+
+            if (
+                country.dataset.country ===
+                savedCountry
+            ) {
+
+                countries.forEach(item => {
+                    item.classList.add("hidden");
+                    item.style.display = "none";
+                });
+
+                country.classList.remove("hidden");
+                country.style.display = "flex";
+
+                selectCountry(country);
+
+            }
+
+        });
+
+    } else {
+
+        /*
+         * United States remains the
+         * default visible country.
+         */
+
+        countries.forEach(country => {
+
+            if (
+                country.dataset.country !==
+                "United States"
+            ) {
+
+                country.classList.add("hidden");
+                country.style.display = "none";
+
+            }
+
+        });
+
+        const defaultCountry =
+            document.querySelector(
+                '.country[data-country="United States"]'
+            );
+
+        if (defaultCountry) {
+
+            defaultCountry.classList.add("selected");
+
+            selectedCountry =
+                defaultCountry.dataset.country;
+
+            selectedLanguage =
+                defaultCountry.dataset.language;
+
+            document.getElementById(
+                "continueBtn"
+            ).disabled = false;
+
+            document.getElementById(
+                "selectedCountryName"
+            ).textContent =
+                defaultCountry.dataset.country;
+
+            document.getElementById(
+                "selectedCountryFlag"
+            ).textContent =
+                defaultCountry.querySelector(
+                    ".flag"
+                ).textContent;
+
+            updateInterfaceLanguage(
+                selectedLanguage
+            );
+
+        }
+
+    }
+
+</script></body>
+</html>

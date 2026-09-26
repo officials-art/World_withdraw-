@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --navy: #0f172a;
+            --text: #172554;
+            --muted: #64748b;
+            --border: #dbe3ef;
+            --surface: #ffffff;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(37, 99, 235, 0.20),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 90% 90%,
+                    rgba(29, 78, 216, 0.18),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #0f172a 0%,
+                    #172554 48%,
+                    #2563eb 100%
+                );
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            top: -130px;
+            right: -100px;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.04);
+            bottom: -120px;
+            left: -100px;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 460px;
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 24px;
+            padding: 38px 34px 30px;
+            box-shadow:
+                0 30px 70px rgba(0, 0, 0, 0.28),
+                0 8px 25px rgba(15, 23, 42, 0.12);
+            position: relative;
+            z-index: 1;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 35px;
+            right: 35px;
+            height: 4px;
+            background: linear-gradient(
+                90deg,
+                #2563eb,
+                #60a5fa,
+                #2563eb
+            );
+            border-radius: 0 0 10px 10px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 17px;
+            border-radius: 22px;
+            background: linear-gradient(
+                145deg,
+                #eff6ff,
+                #dbeafe
+            );
+            border: 1px solid #bfdbfe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 31px;
+            box-shadow:
+                0 8px 20px rgba(37, 99, 235, 0.12);
+        }
+
+        h1 {
+            color: var(--text);
+            font-size: 28px;
+            line-height: 1.2;
+            font-weight: 750;
+            letter-spacing: -0.5px;
+            margin-bottom: 9px;
+        }
+
+        .header p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 19px;
+        }
+
+        label {
+            display: block;
+            color: #1e293b;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.1px;
+        }
+
+        .password-box {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            height: 50px;
+            padding: 14px 50px 14px 15px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #f8fafc;
+            color: #0f172a;
+            font-size: 15px;
+            outline: none;
+            transition:
+                border-color 0.2s ease,
+                background 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .normal-input {
+            padding: 14px 15px;
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        input:hover {
+            border-color: #b8c6d9;
+            background: #ffffff;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            background: #ffffff;
+            box-shadow:
+                0 0 0 4px rgba(37, 99, 235, 0.10),
+                0 4px 12px rgba(37, 99, 235, 0.06);
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 9px;
+            background: transparent;
+            color: #64748b;
+            font-size: 19px;
+            cursor: pointer;
+            padding: 4px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+        .eye-btn:hover {
+            background: #eff6ff;
+            color: var(--primary);
+        }
+
+        .eye-btn:focus-visible {
+            outline: 3px solid rgba(37, 99, 235, 0.20);
+            outline-offset: 2px;
+        }
+
+        .login-btn {
+            width: 100%;
+            height: 52px;
+            border: none;
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #1d4ed8
+            );
+            color: #ffffff;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-top: 7px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.1px;
+            cursor: pointer;
+            box-shadow:
+                0 8px 18px rgba(37, 99, 235, 0.25);
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(
+                135deg,
+                #1d4ed8,
+                #1e40af
+            );
+            transform: translateY(-1px);
+            box-shadow:
+                0 12px 24px rgba(37, 99, 235, 0.30);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+            box-shadow:
+                0 5px 12px rgba(37, 99, 235, 0.22);
+        }
+
+        .login-btn:focus-visible {
+            outline: 3px solid rgba(37, 99, 235, 0.25);
+            outline-offset: 3px;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 23px;
+            padding-top: 20px;
+            border-top: 1px solid #eef2f7;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .signup-link a {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+            margin-left: 3px;
+            transition: color 0.2s ease;
+        }
+
+        .signup-link a:hover {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 500px) {
+
+            body {
+                padding: 15px;
+                align-items: center;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 32px 21px 25px;
+                border-radius: 21px;
+            }
+
+            .container::before {
+                left: 25px;
+                right: 25px;
+            }
+
+            .icon {
+                width: 66px;
+                height: 66px;
+                border-radius: 19px;
+                font-size: 28px;
+                margin-bottom: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .header {
+                margin-bottom: 26px;
+            }
+
+            .form-group {
+                margin-bottom: 17px;
+            }
+
+            input {
+                height: 49px;
+            }
+
+            .login-btn {
+                height: 51px;
+            }
+        }
+
+        @media (max-width: 360px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 29px 16px 23px;
+                border-radius: 18px;
+            }
+
+            .container::before {
+                left: 20px;
+                right: 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .header p {
+                font-size: 13px;
+            }
+
+            label {
+                font-size: 12.5px;
+            }
+
+            input {
+                font-size: 14px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+
+            <div class="icon">🔐</div>
+
+            <h1 id="loginTitle">Login</h1>
+
+            <p id="loginDescription">
+                Login to continue to your account.
+            </p>
+
+        </div>
+
+
+        <form onsubmit="loginAccount(event)">
+
+            <div class="form-group">
+
+                <label for="email" id="emailLabel">
+                    Email Address
+                </label>
+
+                <input
+                    class="normal-input"
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email address"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password" id="passwordLabel">
+                    Password
+                </label>
+
+                <div class="password-box">
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required>
+
+                    <button
+                        type="button"
+                        class="eye-btn"
+                        id="eyeButton"
+                        onclick="togglePassword()"
+                        aria-label="Show password">
+
+                        👁
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-btn"
+                id="loginButton">
+
+                Login
+
+            </button>
+
+        </form>
+
+
+        <div class="signup-link">
+
+            <span id="noAccountText">
+                Don't have an account?
+            </span>
+
+            <a href="signup.html" id="createAccountLink">
+                Create Account
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const translations = {
+
+            en: {
+                title: "Login",
+                description: "Login to continue to your account.",
+                email: "Email Address",
+                emailPlaceholder: "Enter your email address",
+                password: "Password",
+                passwordPlaceholder: "Enter your password",
+                login: "Login",
+                noAccount: "Don't have an account?",
+                createAccount: "Create Account",
+                showPassword: "Show password",
+                hidePassword: "Hide password",
+                incorrect: "Incorrect email or password."
+            },
+
+            es: {
+                title: "Iniciar sesión",
+                description: "Inicia sesión para continuar a tu cuenta.",
+                email: "Dirección de correo electrónico",
+                emailPlaceholder: "Ingresa tu dirección de correo electrónico",
+                password: "Contraseña",
+                passwordPlaceholder: "Ingresa tu contraseña",
+                login: "Iniciar sesión",
+                noAccount: "¿No tienes una cuenta?",
+                createAccount: "Crear cuenta",
+                showPassword: "Mostrar contraseña",
+                hidePassword: "Ocultar contraseña",
+                incorrect: "Correo electrónico o contraseña incorrectos."
+            },
+
+            fr: {
+                title: "Connexion",
+                description: "Connectez-vous pour accéder à votre compte.",
+                email: "Adresse e-mail",
+                emailPlaceholder: "Entrez votre adresse e-mail",
+                password: "Mot de passe",
+                passwordPlaceholder: "Entrez votre mot de passe",
+                login: "Connexion",
+                noAccount: "Vous n'avez pas de compte ?",
+                createAccount: "Créer un compte",
+                showPassword: "Afficher le mot de passe",
+                hidePassword: "Masquer le mot de passe",
+                incorrect: "Adresse e-mail ou mot de passe incorrect."
+            },
+
+            de: {
+                title: "Anmelden",
+                description: "Melden Sie sich an, um zu Ihrem Konto zu gelangen.",
+                email: "E-Mail-Adresse",
+                emailPlaceholder: "Geben Sie Ihre E-Mail-Adresse ein",
+                password: "Passwort",
+                passwordPlaceholder: "Geben Sie Ihr Passwort ein",
+                login: "Anmelden",
+                noAccount: "Sie haben noch kein Konto?",
+                createAccount: "Konto erstellen",
+                showPassword: "Passwort anzeigen",
+                hidePassword: "Passwort ausblenden",
+                incorrect: "Falsche E-Mail-Adresse oder falsches Passwort."
+            },
+
+            pt: {
+                title: "Entrar",
+                description: "Entre para continuar para sua conta.",
+                email: "Endereço de e-mail",
+                emailPlaceholder: "Digite seu endereço de e-mail",
+                password: "Senha",
+                passwordPlaceholder: "Digite sua senha",
+                login: "Entrar",
+                noAccount: "Não tem uma conta?",
+                createAccount: "Criar conta",
+                showPassword: "Mostrar senha",
+                hidePassword: "Ocultar senha",
+                incorrect: "E-mail ou senha incorretos."
+            },
+
+            it: {
+                title: "Accedi",
+                description: "Accedi per continuare al tuo account.",
+                email: "Indirizzo e-mail",
+                emailPlaceholder: "Inserisci il tuo indirizzo e-mail",
+                password: "Password",
+                passwordPlaceholder: "Inserisci la tua password",
+                login: "Accedi",
+                noAccount: "Non hai un account?",
+                createAccount: "Crea account",
+                showPassword: "Mostra password",
+                hidePassword: "Nascondi password",
+                incorrect: "E-mail o password non corretti."
+            },
+
+            nl: {
+                title: "Inloggen",
+                description: "Log in om door te gaan naar je account.",
+                email: "E-mailadres",
+                emailPlaceholder: "Voer je e-mailadres in",
+                password: "Wachtwoord",
+                passwordPlaceholder: "Voer je wachtwoord in",
+                login: "Inloggen",
+                noAccount: "Heb je nog geen account?",
+                createAccount: "Account aanmaken",
+                showPassword: "Wachtwoord tonen",
+                hidePassword: "Wachtwoord verbergen",
+                incorrect: "Onjuist e-mailadres of wachtwoord."
+            },
+
+            sv: {
+                title: "Logga in",
+                description: "Logga in för att fortsätta till ditt konto.",
+                email: "E-postadress",
+                emailPlaceholder: "Ange din e-postadress",
+                password: "Lösenord",
+                passwordPlaceholder: "Ange ditt lösenord",
+                login: "Logga in",
+                noAccount: "Har du inget konto?",
+                createAccount: "Skapa konto",
+                showPassword: "Visa lösenord",
+                hidePassword: "Dölj lösenord",
+                incorrect: "Felaktig e-postadress eller lösenord."
+            },
+
+            no: {
+                title: "Logg inn",
+                description: "Logg inn for å fortsette til kontoen din.",
+                email: "E-postadresse",
+                emailPlaceholder: "Skriv inn e-postadressen din",
+                password: "Passord",
+                passwordPlaceholder: "Skriv inn passordet ditt",
+                login: "Logg inn",
+                noAccount: "Har du ikke en konto?",
+                createAccount: "Opprett konto",
+                showPassword: "Vis passord",
+                hidePassword: "Skjul passord",
+                incorrect: "Feil e-postadresse eller passord."
+            },
+
+            da: {
+                title: "Log ind",
+                description: "Log ind for at fortsætte til din konto.",
+                email: "E-mailadresse",
+                emailPlaceholder: "Indtast din e-mailadresse",
+                password: "Adgangskode",
+                passwordPlaceholder: "Indtast din adgangskode",
+                login: "Log ind",
+                noAccount: "Har du ikke en konto?",
+                createAccount: "Opret konto",
+                showPassword: "Vis adgangskode",
+                hidePassword: "Skjul adgangskode",
+                incorrect: "Forkert e-mailadresse eller adgangskode."
+            },
+
+            fi: {
+                title: "Kirjaudu",
+                description: "Kirjaudu jatkaaksesi tilillesi.",
+                email: "Sähköpostiosoite",
+                emailPlaceholder: "Anna sähköpostiosoitteesi",
+                password: "Salasana",
+                passwordPlaceholder: "Anna salasanasi",
+                login: "Kirjaudu",
+                noAccount: "Eikö sinulla ole tiliä?",
+                createAccount: "Luo tili",
+                showPassword: "Näytä salasana",
+                hidePassword: "Piilota salasana",
+                incorrect: "Virheellinen sähköpostiosoite tai salasana."
+            },
+
+            pl: {
+                title: "Logowanie",
+                description: "Zaloguj się, aby przejść do swojego konta.",
+                email: "Adres e-mail",
+                emailPlaceholder: "Wpisz swój adres e-mail",
+                password: "Hasło",
+                passwordPlaceholder: "Wpisz swoje hasło",
+                login: "Zaloguj się",
+                noAccount: "Nie masz konta?",
+                createAccount: "Utwórz konto",
+                showPassword: "Pokaż hasło",
+                hidePassword: "Ukryj hasło",
+                incorrect: "Nieprawidłowy adres e-mail lub hasło."
+            },
+
+            el: {
+                title: "Σύνδεση",
+                description: "Συνδεθείτε για να συνεχίσετε στον λογαριασμό σας.",
+                email: "Διεύθυνση email",
+                emailPlaceholder: "Εισαγάγετε τη διεύθυνση email σας",
+                password: "Κωδικός πρόσβασης",
+                passwordPlaceholder: "Εισαγάγετε τον κωδικό πρόσβασής σας",
+                login: "Σύνδεση",
+                noAccount: "Δεν έχετε λογαριασμό;",
+                createAccount: "Δημιουργία λογαριασμού",
+                showPassword: "Εμφάνιση κωδικού πρόσβασης",
+                hidePassword: "Απόκρυψη κωδικού πρόσβασης",
+                incorrect: "Λανθασμένο email ή κωδικός πρόσβασης."
+            }
+
+        };
+
+
+        let currentLanguage =
+            localStorage.getItem("language") || "en";
+
+
+        if (!translations[currentLanguage]) {
+            currentLanguage = "en";
+        }
+
+
+        function applyLanguage() {
+
+            const t =
+                translations[currentLanguage];
+
+
+            document.documentElement.lang =
+                currentLanguage;
+
+
+            document.title =
+                t.title;
+
+
+            document.getElementById("loginTitle")
+                .textContent = t.title;
+
+
+            document.getElementById("loginDescription")
+                .textContent = t.description;
+
+
+            document.getElementById("emailLabel")
+                .textContent = t.email;
+
+
+            document.getElementById("email")
+                .placeholder = t.emailPlaceholder;
+
+
+            document.getElementById("passwordLabel")
+                .textContent = t.password;
+
+
+            document.getElementById("password")
+                .placeholder = t.passwordPlaceholder;
+
+
+            document.getElementById("loginButton")
+                .textContent = t.login;
+
+
+            document.getElementById("noAccountText")
+                .textContent = t.noAccount;
+
+
+            document.getElementById("createAccountLink")
+                .textContent = t.createAccount;
+
+
+            updateEyeButton();
+        }
+
+
+        function togglePassword() {
+
+            const password =
+                document.getElementById("password");
+
+
+            if (password.type === "password") {
+
+                password.type = "text";
+
+            } else {
+
+                password.type = "password";
+            }
+
+
+            updateEyeButton();
+        }
+
+
+        function updateEyeButton() {
+
+            const password =
+                document.getElementById("password");
+
+            const button =
+                document.getElementById("eyeButton");
+
+            const t =
+                translations[currentLanguage];
+
+
+            if (password.type === "password") {
+
+                button.textContent = "👁";
+
+                button.setAttribute(
+                    "aria-label",
+                    t.showPassword
+                );
+
+            } else {
+
+                button.textContent = "🙈";
+
+                button.setAttribute(
+                    "aria-label",
+                    t.hidePassword
+                );
+            }
+        }
+
+
+        function loginAccount(event) {
+
+            event.preventDefault();
+
+
+            const email =
+                document.getElementById("email")
+                    .value
+                    .trim();
+
+
+            const password =
+                document.getElementById("password")
+                    .value;
+
+
+            const savedAccount =
+                localStorage.getItem("demoAccount");
+
+
+            const t =
+                translations[currentLanguage];
+
+
+            if (!savedAccount) {
+
+                alert(t.incorrect);
+
+                return;
+            }
+
+
+            let account;
+
+
+            try {
+
+                account =
+                    JSON.parse(savedAccount);
+
+            } catch (error) {
+
+                alert(t.incorrect);
+
+                return;
+            }
+
+
+            if (
+                email.toLowerCase() ===
+                String(account.email || "").toLowerCase()
+                &&
+                password ===
+                String(account.password || "")
+            ) {
+
+                localStorage.setItem(
+                    "loggedIn",
+                    "true"
+                );
+
+
+                window.location.href =
+                    "dashboard.html";
+
+            } else {
+
+                alert(t.incorrect);
+            }
+        }
+
+
+        applyLanguage();
+
+    </script>
+
+</body>
+
+</html>

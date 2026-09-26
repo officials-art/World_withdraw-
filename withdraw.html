@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Withdraw</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --navy: #0f1f4d;
+            --navy-dark: #091535;
+            --blue: #2563eb;
+            --blue-light: #3b82f6;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --surface: #ffffff;
+            --soft: #f8fafc;
+            --green: #16a34a;
+            --green-soft: #ecfdf5;
+            --danger: #dc2626;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(37, 99, 235, 0.18), transparent 32%),
+                radial-gradient(circle at bottom right, rgba(30, 64, 175, 0.14), transparent 30%),
+                linear-gradient(135deg, #eef4ff 0%, #f8fafc 48%, #eef2ff 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 35px 16px;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .withdraw-card {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            border-radius: 26px;
+            padding: 38px;
+            box-shadow:
+                0 25px 60px rgba(15, 23, 42, 0.10),
+                0 8px 20px rgba(15, 23, 42, 0.05);
+        }
+
+        .withdraw-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(
+                90deg,
+                var(--navy),
+                var(--blue),
+                var(--blue-light)
+            );
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header-icon {
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 17px;
+            border-radius: 22px;
+            background: linear-gradient(
+                145deg,
+                #e0ecff,
+                #dbeafe
+            );
+            border: 1px solid #bfdbfe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.12);
+        }
+
+        .header h1 {
+            color: var(--navy);
+            font-size: 29px;
+            line-height: 1.25;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        /* Balance */
+
+        .balance-box {
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(
+                    circle at 90% 15%,
+                    rgba(255, 255, 255, 0.18),
+                    transparent 28%
+                ),
+                linear-gradient(
+                    135deg,
+                    var(--navy-dark),
+                    var(--navy) 48%,
+                    var(--blue)
+                );
+            color: #ffffff;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 14px 30px rgba(23, 37, 84, 0.20);
+        }
+
+        .balance-box::after {
+            content: "";
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            right: -45px;
+            bottom: -65px;
+        }
+
+        .balance-label {
+            position: relative;
+            z-index: 1;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            opacity: 0.82;
+            margin-bottom: 9px;
+            text-transform: uppercase;
+        }
+
+        .balance-amount {
+            position: relative;
+            z-index: 1;
+            font-size: 31px;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            word-break: break-word;
+        }
+
+        /* Validation */
+
+        .validation-box {
+            background: #f8fbff;
+            border: 1px solid #cfe0ff;
+            border-radius: 17px;
+            padding: 19px;
+            margin-bottom: 28px;
+            color: #1e3a8a;
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
+        .validation-title {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-weight: 800;
+            font-size: 15px;
+            margin-bottom: 9px;
+            color: #173b8f;
+        }
+
+        .validation-title::before {
+            content: "✓";
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #dbeafe;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .validation-message {
+            font-weight: 500;
+        }
+
+        .support-contact {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #cfe0ff;
+            font-size: 13px;
+            line-height: 1.75;
+            color: #475569;
+        }
+
+        .support-contact strong {
+            color: #1e40af;
+            font-weight: 700;
+        }
+
+        /* Form */
+
+        #withdrawForm {
+            margin-top: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #334155;
+            letter-spacing: 0.1px;
+        }
+
+        .form-group input {
+            width: 100%;
+            min-height: 49px;
+            padding: 13px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 11px;
+            font-family: inherit;
+            font-size: 15px;
+            color: var(--text);
+            outline: none;
+            background: #ffffff;
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+        .form-group input:hover {
+            border-color: #94a3b8;
+        }
+
+        .form-group input:focus {
+            border-color: var(--blue);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.11);
+        }
+
+        .readonly-field {
+            background: #f8fafc !important;
+            color: #475569;
+            cursor: default;
+        }
+
+        .country-display {
+            width: 100%;
+            min-height: 49px;
+            padding: 13px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 11px;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        #verificationNote {
+            margin-top: 7px !important;
+            padding-left: 2px;
+            color: #64748b !important;
+            font-size: 12px !important;
+            line-height: 1.5;
+        }
+
+        /* Submit */
+
+        .submit-btn {
+            position: relative;
+            width: 100%;
+            min-height: 52px;
+            padding: 14px 18px;
+            margin-top: 6px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(
+                135deg,
+                var(--navy),
+                var(--blue)
+            );
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.1px;
+            cursor: pointer;
+            box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                filter 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.06);
+            box-shadow: 0 14px 28px rgba(37, 99, 235, 0.27);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:focus {
+            outline: 3px solid rgba(37, 99, 235, 0.22);
+            outline-offset: 3px;
+        }
+
+        /* Warning */
+
+        .warning {
+            display: none;
+            margin-top: 20px;
+            padding: 16px 17px;
+            border-radius: 12px;
+            background: #fff7f7;
+            border: 1px solid #fecaca;
+            color: var(--danger);
+            font-size: 14px;
+            line-height: 1.5;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        /* Back */
+
+        .back-btn {
+            display: none;
+            width: 100%;
+            min-height: 49px;
+            padding: 13px;
+            margin-top: 12px;
+            border-radius: 11px;
+            text-align: center;
+            text-decoration: none;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            color: var(--navy);
+            font-weight: 800;
+            font-size: 14px;
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 18px 10px;
+            }
+
+            .withdraw-card {
+                padding: 30px 19px;
+                border-radius: 21px;
+            }
+
+            .header {
+                margin-bottom: 25px;
+            }
+
+            .header-icon {
+                width: 68px;
+                height: 68px;
+                border-radius: 19px;
+                font-size: 32px;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .header p {
+                font-size: 14px;
+            }
+
+            .balance-box {
+                padding: 21px;
+                border-radius: 17px;
+            }
+
+            .balance-amount {
+                font-size: 25px;
+            }
+
+            .validation-box {
+                padding: 17px;
+                border-radius: 15px;
+            }
+
+            .form-group {
+                margin-bottom: 18px;
+            }
+        }
+
+        @media (max-width: 380px) {
+
+            .withdraw-card {
+                padding: 27px 15px;
+            }
+
+            .header h1 {
+                font-size: 23px;
+            }
+
+            .balance-amount {
+                font-size: 22px;
+            }
+
+            .validation-box {
+                font-size: 13px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-wrapper">
+
+        <main class="withdraw-card">
+
+            <div class="header">
+
+                <div class="header-icon" aria-hidden="true">
+                    💸
+                </div>
+
+                <h1 id="withdrawTitle">
+                    Withdrawal Section
+                </h1>
+
+                <p id="withdrawSubtitle">
+                    Enter your details to continue
+                </p>
+
+            </div>
+
+
+            <!-- Available Withdrawal Amount -->
+
+            <section class="balance-box"
+                aria-label="Available withdrawal amount">
+
+                <div class="balance-label"
+                    id="availableWithdrawalAmount">
+                    Available Withdrawal Amount
+                </div>
+
+                <div class="balance-amount"
+                    id="withdrawalBalance">
+                    USD $10,000
+                </div>
+
+            </section>
+
+
+            <!-- Validation Service -->
+
+            <div class="validation-box">
+
+                <div class="validation-title"
+                    id="validationService">
+                    Validation service
+                </div>
+
+                <div class="validation-message"
+                    id="validationMessage">
+                    Your selected country is "United States",
+                    you can only withdraw this money with your
+                    verification code.
+                </div>
+
+                <div class="support-contact"
+                    id="supportContact">
+
+                    For more information please contact our Agent
+                    on only 🧏‍♂️ "Signal apps":
+
+                    <strong>+1 (215) 431 2727</strong>
+
+                    <br><br>
+
+                    Or E-mail:
+
+                    <strong>trustconsultant10@gmail.com</strong>
+
+                </div>
+
+            </div>
+
+
+            <form id="withdrawForm">
+
+                <!-- User Name -->
+
+                <div class="form-group">
+
+                    <label for="userName"
+                        id="userNameLabel">
+                        User Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="userName"
+                        class="readonly-field"
+                        readonly
+                        aria-readonly="true"
+                    >
+
+                </div>
+
+
+                <!-- Selected Country -->
+
+                <div class="form-group">
+
+                    <label for="selectedCountry"
+                        id="countryLabel">
+                        Selected Country
+                    </label>
+
+                    <div
+                        id="selectedCountry"
+                        class="country-display">
+                    </div>
+
+                </div>
+
+
+                <!-- Account Number -->
+
+                <div class="form-group">
+
+                    <label for="accountNumber"
+                        id="accountNumberLabel">
+                        Account Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="accountNumber"
+                        name="accountNumber"
+                        autocomplete="off"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Bank Name -->
+
+                <div class="form-group">
+
+                    <label for="bankName"
+                        id="bankNameLabel">
+                        Bank Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="bankName"
+                        name="bankName"
+                        autocomplete="organization"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Verification Code -->
+
+                <div class="form-group">
+
+                    <label for="verificationCode"
+                        id="verificationCodeLabel">
+                        Verification Code
+                    </label>
+
+                    <input
+                        type="text"
+                        id="verificationCode"
+                        name="verificationCode"
+                        autocomplete="off"
+                        inputmode="numeric"
+                        required
+                        aria-describedby="verificationNote"
+                    >
+
+                    <div
+                        id="verificationNote"
+                        style="margin-top:7px;color:#64748b;font-size:12px;">
+                        Do not share your Verification code to anyone.
+                    </div>
+
+                </div>
+
+
+                <!-- Submit -->
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                    id="submitButton">
+                    Submit
+                </button>
+
+            </form>
+
+
+            <!-- Warning -->
+
+            <div
+                class="warning"
+                id="warningMessage"
+                role="alert">
+                ⚠️ Verification code is invalid
+            </div>
+
+
+            <!-- Back to Dashboard -->
+
+            <a
+                href="dashboard.html"
+                class="back-btn"
+                id="backDashboard">
+                Back to Dashboard
+            </a>
+
+        </main>
+
+    </div>
+
+
+    <script>
+
+        /* =========================================================
+           TRANSLATIONS
+        ========================================================= */
+
+        const translations = {
+
+            en: {
+                withdrawTitle: "Withdrawal Section",
+                withdrawSubtitle: "Enter your details to continue",
+                availableWithdrawalAmount: "Available Withdrawal Amount",
+                validationService: "Validation service",
+                validationMessage:
+                    'Your selected country is "{country}", you can only withdraw this money with your verification code.',
+                userNameLabel: "User Name",
+                countryLabel: "Selected Country",
+                accountNumber: "Account Number",
+                bankName: "Bank Name",
+                verificationCode: "Verification Code",
+                verificationNote:
+                    "Do not share your Verification code to anyone.",
+                submit: "Submit",
+                invalidCode: "⚠️ Verification code is invalid",
+                backDashboard: "Back to Dashboard"
+            },
+
+            es: {
+                withdrawTitle: "Sección de Retiro",
+                withdrawSubtitle: "Ingrese sus datos para continuar",
+                availableWithdrawalAmount: "Monto Disponible para Retiro",
+                validationService: "Servicio de validación",
+                validationMessage:
+                    'Su país seleccionado es "{country}", solo puede retirar este dinero con su código de verificación.',
+                userNameLabel: "Nombre de Usuario",
+                countryLabel: "País Seleccionado",
+                accountNumber: "Número de Cuenta",
+                bankName: "Nombre del Banco",
+                verificationCode: "Código de Verificación",
+                verificationNote:
+                    "No comparta su código de verificación con nadie.",
+                submit: "Enviar",
+                invalidCode: "⚠️ El código de verificación no es válido",
+                backDashboard: "Volver al Panel"
+            },
+
+            fr: {
+                withdrawTitle: "Section de Retrait",
+                withdrawSubtitle: "Entrez vos informations pour continuer",
+                availableWithdrawalAmount: "Montant Disponible au Retrait",
+                validationService: "Service de validation",
+                validationMessage:
+                    'Votre pays sélectionné est "{country}", vous ne pouvez retirer cet argent qu’avec votre code de vérification.',
+                userNameLabel: "Nom de l'Utilisateur",
+                countryLabel: "Pays Sélectionné",
+                accountNumber: "Numéro de Compte",
+                bankName: "Nom de la Banque",
+                verificationCode: "Code de Vérification",
+                verificationNote:
+                    "Ne partagez votre code de vérification avec personne.",
+                submit: "Soumettre",
+                invalidCode: "⚠️ Le code de vérification est invalide",
+                backDashboard: "Retour au Tableau de Bord"
+            },
+
+            de: {
+                withdrawTitle: "Auszahlungsbereich",
+                withdrawSubtitle: "Geben Sie Ihre Daten ein, um fortzufahren",
+                availableWithdrawalAmount: "Verfügbarer Auszahlungsbetrag",
+                validationService: "Validierungsdienst",
+                validationMessage:
+                    'Ihr ausgewähltes Land ist "{country}". Sie können dieses Geld nur mit Ihrem Verifizierungscode abheben.',
+                userNameLabel: "Benutzername",
+                countryLabel: "Ausgewähltes Land",
+                accountNumber: "Kontonummer",
+                bankName: "Bankname",
+                verificationCode: "Verifizierungscode",
+                verificationNote:
+                    "Geben Sie Ihren Verifizierungscode an niemanden weiter.",
+                submit: "Absenden",
+                invalidCode: "⚠️ Der Verifizierungscode ist ungültig",
+                backDashboard: "Zurück zum Dashboard"
+            },
+
+            pt: {
+                withdrawTitle: "Seção de Saque",
+                withdrawSubtitle: "Insira seus dados para continuar",
+                availableWithdrawalAmount: "Valor Disponível para Saque",
+                validationService: "Serviço de validação",
+                validationMessage:
+                    'Seu país selecionado é "{country}", você só pode sacar este dinheiro com seu código de verificação.',
+                userNameLabel: "Nome do Usuário",
+                countryLabel: "País Selecionado",
+                accountNumber: "Número da Conta",
+                bankName: "Nome do Banco",
+                verificationCode: "Código de Verificação",
+                verificationNote:
+                    "Não compartilhe seu código de verificação com ninguém.",
+                submit: "Enviar",
+                invalidCode: "⚠️ O código de verificação é inválido",
+                backDashboard: "Voltar ao Painel"
+            },
+
+            it: {
+                withdrawTitle: "Sezione Prelievo",
+                withdrawSubtitle: "Inserisci i tuoi dati per continuare",
+                availableWithdrawalAmount: "Importo Disponibile per il Prelievo",
+                validationService: "Servizio di convalida",
+                validationMessage:
+                    'Il paese selezionato è "{country}", puoi prelevare questo denaro solo con il tuo codice di verifica.',
+                userNameLabel: "Nome Utente",
+                countryLabel: "Paese Selezionato",
+                accountNumber: "Numero di Conto",
+                bankName: "Nome della Banca",
+                verificationCode: "Codice di Verifica",
+                verificationNote:
+                    "Non condividere il tuo codice di verifica con nessuno.",
+                submit: "Invia",
+                invalidCode: "⚠️ Il codice di verifica non è valido",
+                backDashboard: "Torna alla Dashboard"
+            },
+
+            nl: {
+                withdrawTitle: "Opnamegedeelte",
+                withdrawSubtitle: "Voer uw gegevens in om door te gaan",
+                availableWithdrawalAmount: "Beschikbaar Opnamebedrag",
+                validationService: "Validatieservice",
+                validationMessage:
+                    'Uw geselecteerde land is "{country}". U kunt dit geld alleen opnemen met uw verificatiecode.',
+                userNameLabel: "Naam van de Gebruiker",
+                countryLabel: "Geselecteerd Land",
+                accountNumber: "Rekeningnummer",
+                bankName: "Banknaam",
+                verificationCode: "Verificatiecode",
+                verificationNote:
+                    "Deel uw verificatiecode met niemand.",
+                submit: "Verzenden",
+                invalidCode: "⚠️ De verificatiecode is ongeldig",
+                backDashboard: "Terug naar Dashboard"
+            },
+
+            sv: {
+                withdrawTitle: "Uttagssektion",
+                withdrawSubtitle: "Ange dina uppgifter för att fortsätta",
+                availableWithdrawalAmount: "Tillgängligt Uttagsbelopp",
+                validationService: "Valideringstjänst",
+                validationMessage:
+                    'Ditt valda land är "{country}". Du kan endast ta ut dessa pengar med din verifieringskod.',
+                userNameLabel: "Användarens Namn",
+                countryLabel: "Valt Land",
+                accountNumber: "Kontonummer",
+                bankName: "Banknamn",
+                verificationCode: "Verifieringskod",
+                verificationNote:
+                    "Dela inte din verifieringskod med någon.",
+                submit: "Skicka",
+                invalidCode: "⚠️ Verifieringskoden är ogiltig",
+                backDashboard: "Tillbaka till Dashboard"
+            },
+
+            no: {
+                withdrawTitle: "Uttaksseksjon",
+                withdrawSubtitle: "Skriv inn opplysningene dine for å fortsette",
+                availableWithdrawalAmount: "Tilgjengelig Uttaksbeløp",
+                validationService: "Valideringstjeneste",
+                validationMessage:
+                    'Det valgte landet ditt er "{country}". Du kan bare ta ut disse pengene med bekreftelseskoden din.',
+                userNameLabel: "Brukerens Navn",
+                countryLabel: "Valgt Land",
+                accountNumber: "Kontonummer",
+                bankName: "Banknavn",
+                verificationCode: "Bekreftelseskode",
+                verificationNote:
+                    "Ikke del bekreftelseskoden din med noen.",
+                submit: "Send inn",
+                invalidCode: "⚠️ Bekreftelseskoden er ugyldig",
+                backDashboard: "Tilbake til Dashboard"
+            },
+
+            da: {
+                withdrawTitle: "Hævesektion",
+                withdrawSubtitle: "Indtast dine oplysninger for at fortsætte",
+                availableWithdrawalAmount: "Tilgængeligt Hævebeløb",
+                validationService: "Valideringstjeneste",
+                validationMessage:
+                    'Dit valgte land er "{country}". Du kan kun hæve disse penge med din bekræftelseskode.',
+                userNameLabel: "Brugerens Navn",
+                countryLabel: "Valgt Land",
+                accountNumber: "Kontonummer",
+                bankName: "Banknavn",
+                verificationCode: "Bekræftelseskode",
+                verificationNote:
+                    "Del ikke din bekræftelseskode med nogen.",
+                submit: "Indsend",
+                invalidCode: "⚠️ Bekræftelseskoden er ugyldig",
+                backDashboard: "Tilbage til Dashboard"
+            },
+
+            fi: {
+                withdrawTitle: "Nosto-osio",
+                withdrawSubtitle: "Anna tietosi jatkaaksesi",
+                availableWithdrawalAmount: "Käytettävissä oleva nostosumma",
+                validationService: "Vahvistuspalvelu",
+                validationMessage:
+                    'Valitsemasi maa on "{country}". Voit nostaa tämän rahan vain vahvistuskoodillasi.',
+                userNameLabel: "Käyttäjän Nimi",
+                countryLabel: "Valittu Maa",
+                accountNumber: "Tilinumero",
+                bankName: "Pankin Nimi",
+                verificationCode: "Vahvistuskoodi",
+                verificationNote:
+                    "Älä jaa vahvistuskoodiasi kenellekään.",
+                submit: "Lähetä",
+                invalidCode: "⚠️ Vahvistuskoodi on virheellinen",
+                backDashboard: "Takaisin Hallintapaneeliin"
+            },
+
+            pl: {
+                withdrawTitle: "Sekcja Wypłaty",
+                withdrawSubtitle: "Wprowadź swoje dane, aby kontynuować",
+                availableWithdrawalAmount: "Dostępna Kwota Wypłaty",
+                validationService: "Usługa walidacji",
+                validationMessage:
+                    'Wybrany kraj to "{country}". Możesz wypłacić te pieniądze tylko za pomocą kodu weryfikacyjnego.',
+                userNameLabel: "Nazwa Użytkownika",
+                countryLabel: "Wybrany Kraj",
+                accountNumber: "Numer Konta",
+                bankName: "Nazwa Banku",
+                verificationCode: "Kod Weryfikacyjny",
+                verificationNote:
+                    "Nie udostępniaj swojego kodu weryfikacyjnego nikomu.",
+                submit: "Prześlij",
+                invalidCode: "⚠️ Kod weryfikacyjny jest nieprawidłowy",
+                backDashboard: "Powrót do Panelu"
+            },
+
+            el: {
+                withdrawTitle: "Ενότητα Ανάληψης",
+                withdrawSubtitle: "Εισαγάγετε τα στοιχεία σας για να συνεχίσετε",
+                availableWithdrawalAmount: "Διαθέσιμο Ποσό Ανάληψης",
+                validationService: "Υπηρεσία επικύρωσης",
+                validationMessage:
+                    'Η επιλεγμένη χώρα σας είναι "{country}". Μπορείτε να κάνετε ανάληψη αυτού του ποσού μόνο με τον κωδικό επαλήθευσής σας.',
+                userNameLabel: "Όνομα Χρήστη",
+                countryLabel: "Επιλεγμένη Χώρα",
+                accountNumber: "Αριθμός Λογαριασμού",
+                bankName: "Όνομα Τράπεζας",
+                verificationCode: "Κωδικός Επαλήθευσης",
+                verificationNote:
+                    "Μην μοιράζεστε τον κωδικό επαλήθευσής σας με κανέναν.",
+                submit: "Υποβολή",
+                invalidCode: "⚠️ Ο κωδικός επαλήθευσης δεν είναι έγκυρος",
+                backDashboard: "Επιστροφή στον Πίνακα"
+            }
+
+        };
+
+
+        /* =========================================================
+           FIXED DEMO CURRENCY SETTINGS
+        ========================================================= */
+
+        const currencySettings = {
+
+            "Canada": {
+                code: "CAD",
+                symbol: "$",
+                rate: 1.36,
+                locale: "en-CA"
+            },
+
+            "United States": {
+                code: "USD",
+                symbol: "$",
+                rate: 1,
+                locale: "en-US"
+            },
+
+            "Mexico": {
+                code: "MXN",
+                symbol: "$",
+                rate: 18.5,
+                locale: "es-MX"
+            },
+
+            "Argentina": {
+                code: "ARS",
+                symbol: "$",
+                rate: 1450,
+                locale: "es-AR"
+            },
+
+            "Brazil": {
+                code: "BRL",
+                symbol: "R$",
+                rate: 5.4,
+                locale: "pt-BR"
+            },
+
+            "United Kingdom": {
+                code: "GBP",
+                symbol: "£",
+                rate: 0.74,
+                locale: "en-GB"
+            },
+
+            "Ireland": {
+                code: "EUR",
+                symbol: "€",
+                rate: 0.85,
+                locale: "en-IE"
+            },
+
+            "France": {
+                code: "EUR",
+                symbol: "€",
+                rate: 0.85,
+                locale: "fr-FR"
+            },
+
+            "Germany": {
+                code: "EUR",
+                symbol: "€",
+                rate: 0.85,
+                locale: "de-DE"
+            },
+
+            "Spain": {
+                code: "EUR",
+                symbol: "€",
+                rate: 0.85,
+                locale: "es-ES"
+            },
+
+            "Italy": {
+                code: "EUR",
+                symbol: "€",
+                rate: 0.85,
+                locale: "it-IT"
+            },
+
+            "Portugal": {
+                code: "EUR",
+                symbol: "€",
+                rate: 0.85,
+                locale: "pt-PT"
+            },
+
+            "Netherlands": {
+                code: "EUR",
+                symbol: "€",
+                rate: 0.85,
+                locale: "nl-NL"
+            },
+
+            "Belgium": {
+                code: "EUR",
+                symbol: "€",
+                rate: 0.85,
+                locale: "nl-BE"
+            },
+
+            "Switzerland": {
+                code: "CHF",
+                symbol: "CHF ",
+                rate: 0.80,
+                locale: "de-CH"
+            },
+
+            "Austria": {
+                code: "EUR",
+                symbol: "€",
+                rate: 0.85,
+                locale: "de-AT"
+            },
+
+            "Sweden": {
+                code: "SEK",
+                symbol: "kr ",
+                rate: 9.35,
+                locale: "sv-SE"
+            },
+
+            "Norway": {
+                code: "NOK",
+                symbol: "kr ",
+                rate: 9.95,
+                locale: "nb-NO"
+            },
+
+            "Denmark": {
+                code: "DKK",
+                symbol: "kr ",
+                rate: 6.35,
+                locale: "da-DK"
+            },
+
+            "Finland": {
+                code: "EUR",
+                symbol: "€",
+                rate: 0.85,
+                locale: "fi-FI"
+            },
+
+            "Poland": {
+                code: "PLN",
+                symbol: "zł ",
+                rate: 3.65,
+                locale: "pl-PL"
+            },
+
+            "Greece": {
+                code: "EUR",
+                symbol: "€",
+                rate: 0.85,
+                locale: "el-GR"
+            },
+
+            "Australia": {
+                code: "AUD",
+                symbol: "$",
+                rate: 1.52,
+                locale: "en-AU"
+            },
+
+            "New Zealand": {
+                code: "NZD",
+                symbol: "$",
+                rate: 1.67,
+                locale: "en-NZ"
+            }
+
+        };
+
+
+        /* =========================================================
+           GET SAVED LANGUAGE
+        ========================================================= */
+
+        function getLanguage() {
+
+            const savedLanguage =
+                localStorage.getItem("language");
+
+            if (
+                savedLanguage &&
+                translations[savedLanguage]
+            ) {
+                return savedLanguage;
+            }
+
+            return "en";
+        }
+
+
+        /* =========================================================
+           GET SELECTED COUNTRY
+        ========================================================= */
+
+        function getSelectedCountry() {
+
+            return (
+                localStorage.getItem("selectedCountry") ||
+                "United States"
+            );
+
+        }
+
+
+        /* =========================================================
+           LOAD USER INFORMATION
+        ========================================================= */
+
+        function loadUserInformation() {
+
+            let account = {
+                name: "",
+                email: ""
+            };
+
+            try {
+
+                const savedAccount =
+                    localStorage.getItem("demoAccount");
+
+                if (savedAccount) {
+                    account =
+                        JSON.parse(savedAccount);
+                }
+
+            } catch (error) {
+
+                console.log(
+                    "Unable to read account information."
+                );
+
+            }
+
+
+            document.getElementById(
+                "userName"
+            ).value =
+                account.name || "User";
+
+
+            document.getElementById(
+                "selectedCountry"
+            ).textContent =
+                getSelectedCountry();
+
+        }
+
+
+        /* =========================================================
+           GET BASE WITHDRAWAL AMOUNT
+        ========================================================= */
+
+        function getBaseWithdrawalAmount() {
+
+            let amount =
+                localStorage.getItem("demoBalance");
+
+
+            if (
+                amount === null ||
+                amount === "" ||
+                isNaN(Number(amount))
+            ) {
+
+                amount = 10000;
+
+                localStorage.setItem(
+                    "demoBalance",
+                    "10000"
+                );
+
+            }
+
+
+            amount = Number(amount);
+
+
+            if (amount === 5000) {
+
+                amount = 10000;
+
+                localStorage.setItem(
+                    "demoBalance",
+                    "10000"
+                );
+
+            }
+
+
+            return amount;
+
+        }
+
+
+        /* =========================================================
+           FORMAT WITHDRAWAL AMOUNT
+        ========================================================= */
+
+        function formatWithdrawalAmount() {
+
+            const country =
+                getSelectedCountry();
+
+
+            const currency =
+                currencySettings[country] ||
+                currencySettings["United States"];
+
+
+            const baseUSD =
+                getBaseWithdrawalAmount();
+
+
+            const convertedAmount =
+                baseUSD * currency.rate;
+
+
+            const formattedAmount =
+                new Intl.NumberFormat(
+                    currency.locale,
+                    {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2
+                    }
+                ).format(convertedAmount);
+
+
+            return (
+                currency.code +
+                " " +
+                currency.symbol +
+                formattedAmount
+            );
+
+        }
+
+
+        /* =========================================================
+           UPDATE WITHDRAWAL BALANCE
+        ========================================================= */
+
+        function updateWithdrawalBalance() {
+
+            const balanceElement =
+                document.getElementById(
+                    "withdrawalBalance"
+                );
+
+
+            if (!balanceElement) {
+                return;
+            }
+
+
+            balanceElement.textContent =
+                formatWithdrawalAmount();
+
+        }
+
+
+        /* =========================================================
+           UPDATE VALIDATION MESSAGE
+        ========================================================= */
+
+        function updateValidationMessage() {
+
+            const language =
+                getLanguage();
+
+            const text =
+                translations[language];
+
+            const country =
+                getSelectedCountry();
+
+
+            document.getElementById(
+                "validationMessage"
+            ).textContent =
+                text.validationMessage.replace(
+                    "{country}",
+                    country
+                );
+
+        }
+
+
+        /* =========================================================
+           APPLY SAVED LANGUAGE
+        ========================================================= */
+
+        function applyLanguage() {
+
+            const language =
+                getLanguage();
+
+
+            const text =
+                translations[language];
+
+
+            document.documentElement.lang =
+                language;
+
+
+            document.title =
+                text.withdrawTitle;
+
+
+            document.getElementById(
+                "withdrawTitle"
+            ).textContent =
+                text.withdrawTitle;
+
+
+            document.getElementById(
+                "withdrawSubtitle"
+            ).textContent =
+                text.withdrawSubtitle;
+
+
+            document.getElementById(
+                "availableWithdrawalAmount"
+            ).textContent =
+                text.availableWithdrawalAmount;
+
+
+            document.getElementById(
+                "validationService"
+            ).textContent =
+                text.validationService;
+
+
+            document.getElementById(
+                "userNameLabel"
+            ).textContent =
+                text.userNameLabel;
+
+
+            document.getElementById(
+                "countryLabel"
+            ).textContent =
+                text.countryLabel;
+
+
+            document.getElementById(
+                "accountNumberLabel"
+            ).textContent =
+                text.accountNumber;
+
+
+            document.getElementById(
+                "bankNameLabel"
+            ).textContent =
+                text.bankName;
+
+
+            document.getElementById(
+                "verificationCodeLabel"
+            ).textContent =
+                text.verificationCode;
+
+
+            document.getElementById(
+                "verificationNote"
+            ).textContent =
+                text.verificationNote;
+
+
+            document.getElementById(
+                "submitButton"
+            ).textContent =
+                text.submit;
+
+
+            document.getElementById(
+                "warningMessage"
+            ).textContent =
+                text.invalidCode;
+
+
+            document.getElementById(
+                "backDashboard"
+            ).textContent =
+                text.backDashboard;
+
+
+            updateValidationMessage();
+
+            updateWithdrawalBalance();
+
+        }
+
+
+        /* =========================================================
+           FORM SUBMISSION
+
+           Demo behavior only.
+           Verification code is NOT stored or transmitted.
+        ========================================================= */
+
+        document
+            .getElementById("withdrawForm")
+            .addEventListener(
+                "submit",
+                function (event) {
+
+                    event.preventDefault();
+
+
+                    const warning =
+                        document.getElementById(
+                            "warningMessage"
+                        );
+
+
+                    const backButton =
+                        document.getElementById(
+                            "backDashboard"
+                        );
+
+
+                    warning.style.display =
+                        "block";
+
+
+                    backButton.style.display =
+                        "block";
+
+
+                    /*
+                     * Clear the verification code
+                     * after submission.
+                     */
+
+                    document.getElementById(
+                        "verificationCode"
+                    ).value = "";
+
+                }
+            );
+
+
+        /* =========================================================
+           INITIALIZE PAGE
+        ========================================================= */
+
+        loadUserInformation();
+
+        applyLanguage();
+
+        updateWithdrawalBalance();
+
+    </script>
+
+</body>
+
+</html>

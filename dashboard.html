@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Congratulations 🎊</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #0f1f4d;
+            --primary-dark: #0a1433;
+            --primary-light: #2563eb;
+            --blue-soft: #eff6ff;
+            --green: #16a34a;
+            --green-dark: #15803d;
+            --green-light: #dcfce7;
+            --bg: #f4f7fb;
+            --white: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e5eaf1;
+            --danger: #dc2626;
+            --shadow: 0 12px 35px rgba(15, 23, 42, 0.07);
+            --shadow-lg: 0 20px 55px rgba(15, 23, 42, 0.12);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at 85% 5%, rgba(37, 99, 235, 0.06), transparent 28%),
+                var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select,
+        a {
+            font: inherit;
+        }
+
+        button,
+        a,
+        select {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :focus-visible {
+            outline: 3px solid #f59e0b;
+            outline-offset: 3px;
+        }
+
+        .skip-link {
+            position: fixed;
+            top: -60px;
+            left: 15px;
+            z-index: 9999;
+            background: #ffffff;
+            color: var(--primary);
+            padding: 12px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: var(--shadow-lg);
+            transition: top 0.2s ease;
+        }
+
+        .skip-link:focus {
+            top: 15px;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background:
+                linear-gradient(180deg, #101f4b 0%, #0b1738 100%);
+            color: white;
+            padding: 24px 14px;
+            z-index: 1000;
+            overflow-y: auto;
+            transition: transform 0.28s ease;
+            box-shadow: 8px 0 30px rgba(15, 23, 42, 0.12);
+        }
+
+        .sidebar::after {
+            content: "";
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(37, 99, 235, 0.14);
+            top: -70px;
+            right: -70px;
+            pointer-events: none;
+        }
+
+        .logo {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 55px;
+            margin-bottom: 30px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.06);
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .nav {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .nav button {
+            width: 100%;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #cbd5e1;
+            padding: 14px 15px;
+            border-radius: 12px;
+            text-align: left;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .nav button:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            transform: translateX(2px);
+        }
+
+        .nav button.active {
+            background: linear-gradient(
+                135deg,
+                rgba(37, 99, 235, 0.95),
+                rgba(59, 130, 246, 0.82)
+            );
+            border-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.22);
+        }
+
+        .logout-btn {
+            margin-top: 24px;
+            color: #fecaca !important;
+        }
+
+        .logout-btn:hover {
+            background: rgba(220, 38, 38, 0.12) !important;
+            color: #fee2e2 !important;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 78px;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .topbar h1 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            color: var(--primary);
+        }
+
+        .menu-btn {
+            display: none;
+            border: none;
+            background: var(--primary);
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            cursor: pointer;
+            font-size: 21px;
+            box-shadow: 0 7px 18px rgba(15, 31, 77, 0.18);
+        }
+
+        .profile-btn {
+            border: 1px solid #dbe5f3;
+            background: var(--blue-soft);
+            color: var(--primary-light);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .profile-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.14);
+        }
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .content {
+            padding: 34px;
+            max-width: 1280px;
+            margin: auto;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: sectionIn 0.25s ease;
+        }
+
+        @keyframes sectionIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================
+           WELCOME
+        ========================= */
+
+        .welcome-card {
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 88% 18%, rgba(96, 165, 250, 0.35), transparent 28%),
+                linear-gradient(135deg, #101f4b 0%, #1d4ed8 100%);
+            color: white;
+            padding: 36px;
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 24px;
+        }
+
+        .welcome-card::before {
+            content: "";
+            position: absolute;
+            width: 190px;
+            height: 190px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            right: -65px;
+            bottom: -95px;
+        }
+
+        .welcome-card::after {
+            content: "";
+            position: absolute;
+            width: 95px;
+            height: 95px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            right: 85px;
+            top: -55px;
+        }
+
+        .welcome-card h2,
+        .welcome-name,
+        .welcome-text,
+        .balance-message {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-card h2 {
+            font-size: 30px;
+            margin-bottom: 10px;
+            letter-spacing: -0.6px;
+        }
+
+        .welcome-name {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 9px;
+        }
+
+        .welcome-text {
+            font-size: 17px;
+            margin-bottom: 9px;
+            opacity: 0.94;
+            line-height: 1.5;
+        }
+
+        .balance-message {
+            font-size: 15px;
+            opacity: 0.84;
+            line-height: 1.6;
+            max-width: 700px;
+        }
+
+        /* =========================
+           BALANCE
+        ========================= */
+
+        .balance-card {
+            position: relative;
+            overflow: hidden;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .balance-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(
+                180deg,
+                var(--primary-light),
+                #60a5fa
+            );
+        }
+
+        .balance-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .balance-label {
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .hide-balance-btn {
+            border: 1px solid #dbeafe;
+            background: var(--blue-soft);
+            color: var(--primary-light);
+            padding: 8px 13px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 700;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .hide-balance-btn:hover {
+            background: #dbeafe;
+            transform: translateY(-1px);
+        }
+
+        .balance-amount {
+            font-size: 42px;
+            line-height: 1.1;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 23px;
+            letter-spacing: -1px;
+        }
+
+        .withdraw-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(
+                135deg,
+                var(--green),
+                var(--green-dark)
+            );
+            color: white;
+            text-decoration: none;
+            padding: 13px 23px;
+            border-radius: 11px;
+            font-weight: 800;
+            box-shadow: 0 8px 18px rgba(22, 163, 74, 0.18);
+            transition: all 0.2s ease;
+        }
+
+        .withdraw-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 11px 23px rgba(22, 163, 74, 0.25);
+        }
+
+        /* =========================
+           GRID
+        ========================= */
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .info-card {
+            position: relative;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 26px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 38px rgba(15, 23, 42, 0.09);
+        }
+
+        .info-card h3 {
+            margin-bottom: 18px;
+            color: var(--primary);
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .info-value {
+            font-weight: 700;
+            text-align: right;
+            word-break: break-word;
+            color: var(--text);
+        }
+
+        .status {
+            color: var(--green);
+            font-weight: 800;
+        }
+
+        /* =========================
+           PROFILE / NOTIFICATIONS / SETTINGS
+        ========================= */
+
+        .profile-card,
+        .notification-card,
+        .settings-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-card h2,
+        .notification-card h2,
+        .settings-card h2 {
+            margin-bottom: 22px;
+            color: var(--primary);
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .profile-card .info-row {
+            padding: 15px 0;
+        }
+
+        .notification-card p,
+        .settings-card p {
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .language-setting {
+            margin-top: 27px;
+            padding-top: 22px;
+            border-top: 1px solid var(--border);
+        }
+
+        .language-setting label {
+            display: block;
+            margin-bottom: 9px;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .language-setting select {
+            width: 100%;
+            max-width: 350px;
+            padding: 13px 14px;
+            border: 1px solid #d7e0ec;
+            border-radius: 11px;
+            background: white;
+            color: var(--text);
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .language-setting select:hover {
+            border-color: #93c5fd;
+        }
+
+        .language-setting select:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        /* =========================
+           MOBILE OVERLAY
+        ========================= */
+
+        .overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+            z-index: 950;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* =========================
+           REDUCED MOTION
+        ========================= */
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+
+        /* =========================
+           TABLET
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .topbar {
+                height: 70px;
+                padding: 0 15px;
+            }
+
+            .content {
+                padding: 20px 15px 30px;
+            }
+
+            .welcome-card {
+                padding: 27px 23px;
+                border-radius: 20px;
+            }
+
+            .welcome-card h2 {
+                font-size: 26px;
+            }
+
+            .welcome-name {
+                font-size: 21px;
+            }
+
+            .welcome-text {
+                font-size: 16px;
+            }
+
+            .balance-card {
+                padding: 24px 21px;
+                border-radius: 20px;
+            }
+
+            .balance-amount {
+                font-size: 32px;
+            }
+
+            .info-card,
+            .profile-card,
+            .notification-card,
+            .settings-card {
+                padding: 23px;
+                border-radius: 18px;
+            }
+        }
+
+        @media (max-width: 420px) {
+
+            .topbar h1 {
+                font-size: 18px;
+            }
+
+            .profile-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .menu-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .welcome-card h2 {
+                font-size: 23px;
+            }
+
+            .welcome-name {
+                font-size: 19px;
+            }
+
+            .balance-top {
+                align-items: flex-start;
+            }
+
+            .balance-label {
+                font-size: 12px;
+            }
+
+            .hide-balance-btn {
+                padding: 7px 10px;
+                font-size: 13px;
+            }
+
+            .balance-amount {
+                font-size: 28px;
+            }
+
+            .withdraw-btn {
+                width: 100%;
+            }
+
+            .info-row {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="#mainContent" class="skip-link" id="skipLink">
+        Skip to main content
+    </a>
+
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+
+        <div class="logo">
+            MyApp 🚀
+        </div>
+
+        <nav class="nav">
+
+            <button
+                id="homeNavBtn"
+                class="active"
+                type="button"
+                aria-current="page"
+                onclick="showHome()">
+                🏠 <span data-key="home">Home</span>
+            </button>
+
+            <button
+                id="profileNavBtn"
+                type="button"
+                onclick="showProfile()">
+                👤 <span data-key="profile">Profile</span>
+            </button>
+
+            <button
+                id="notificationsNavBtn"
+                type="button"
+                onclick="showNotifications()">
+                🔔 <span data-key="notifications">Notifications</span>
+            </button>
+
+            <button
+                id="settingsNavBtn"
+                type="button"
+                onclick="showSettings()">
+                ⚙️ <span data-key="settings">Settings</span>
+            </button>
+
+            <button
+                id="logoutBtn"
+                class="logout-btn"
+                type="button"
+                onclick="logout()">
+                🚪 <span data-key="logout">Logout</span>
+            </button>
+
+        </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main" id="mainContent" tabindex="-1">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    class="menu-btn"
+                    id="menuBtn"
+                    type="button"
+                    aria-label="Open navigation menu"
+                    aria-expanded="false"
+                    aria-controls="sidebar"
+                    onclick="toggleSidebar()">
+                    ☰
+                </button>
+
+                <h1 id="pageTitle">
+                    Congratulations 🎊
+                </h1>
+
+            </div>
+
+            <button
+                class="profile-btn"
+                type="button"
+                aria-label="Open profile"
+                onclick="showProfile()">
+                👤
+            </button>
+
+        </header>
+
+        <div class="content">
+
+            <!-- HOME -->
+            <section
+                class="section active"
+                id="homeSection"
+                aria-labelledby="pageTitle">
+
+                <div class="welcome-card">
+
+                    <h2 id="welcomeTitle">
+                        Congratulations 🎊
+                    </h2>
+
+                    <div
+                        class="welcome-name"
+                        id="welcomeName"
+                        aria-live="polite">
+                        Account Holder
+                    </div>
+
+                    <p
+                        class="welcome-text"
+                        id="welcomeUser"
+                        data-key="welcome">
+                        Welcome to your personal dashboard.
+                    </p>
+
+                    <p
+                        class="balance-message"
+                        id="balanceMessage"
+                        data-key="balanceMessage">
+                        Balance has been added, process your withdraw now.
+                    </p>
+
+                </div>
+
+                <div class="balance-card">
+
+                    <div class="balance-top">
+
+                        <span
+                            class="balance-label"
+                            data-key="availableBalance">
+                            Available Balance
+                        </span>
+
+                        <button
+                            class="hide-balance-btn"
+                            id="hideBalanceBtn"
+                            type="button"
+                            aria-label="Hide balance"
+                            aria-pressed="false"
+                            onclick="toggleBalance()">
+                            👁 <span id="hideBalanceText">Hide</span>
+                        </button>
+
+                    </div>
+
+                    <div
+                        class="balance-amount"
+                        id="balanceAmount"
+                        aria-live="polite">
+                        USD $10,000
+                    </div>
+
+                    <a
+                        href="withdraw.html"
+                        class="withdraw-btn"
+                        id="withdrawBtn">
+                        <span data-key="withdraw">Withdraw</span>
+                    </a>
+
+                </div>
+
+                <div class="cards-grid">
+
+                    <div class="info-card">
+
+                        <h3>
+                            Account Address
+                        </h3>
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Account Address
+                            </span>
+
+                            <span class="info-value">
+                                0x9888d4780372
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="info-card">
+
+                        <h3 data-key="security">
+                            Security
+                        </h3>
+
+                        <div class="info-row">
+
+                            <span
+                                class="info-label"
+                                data-key="status">
+                                Status
+                            </span>
+
+                            <span
+                                class="info-value status"
+                                data-key="active">
+                                Active
+                            </span>
+
+                        </div>
+
+                        <div class="info-row">
+
+                            <span
+                                class="info-label"
+                                data-key="securityLevel">
+                                Security
+                            </span>
+
+                            <span class="info-value">
+                                100%
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- PROFILE -->
+            <section
+                class="section"
+                id="profileSection"
+                aria-labelledby="profileHeading">
+
+                <div class="profile-card">
+
+                    <h2 id="profileHeading" data-key="profile">
+                        Profile
+                    </h2>
+
+                    <div class="info-row">
+
+                        <span
+                            class="info-label"
+                            data-key="name">
+                            Name
+                        </span>
+
+                        <span
+                            class="info-value"
+                            id="profileName">
+                            Account Holder
+                        </span>
+
+                    </div>
+
+                    <div class="info-row">
+
+                        <span
+                            class="info-label"
+                            data-key="email">
+                            Email
+                        </span>
+
+                        <span
+                            class="info-value"
+                            id="profileEmail">
+                            —
+                        </span>
+
+                    </div>
+
+                    <div class="language-setting">
+
+                        <label
+                            for="languageSelect"
+                            data-key="language">
+                            Language
+                        </label>
+
+                        <select
+                            id="languageSelect"
+                            aria-label="Select language"
+                            onchange="changeLanguage(this.value)">
+
+                            <option value="en">English 🇬🇧</option>
+                            <option value="es">Español 🇪🇸</option>
+                            <option value="fr">Français 🇫🇷</option>
+                            <option value="de">Deutsch 🇩🇪</option>
+                            <option value="pt">Português 🇵🇹</option>
+                            <option value="it">Italiano 🇮🇹</option>
+                            <option value="nl">Nederlands 🇳🇱</option>
+                            <option value="sv">Svenska 🇸🇪</option>
+                            <option value="no">Norsk 🇳🇴</option>
+                            <option value="da">Dansk 🇩🇰</option>
+                            <option value="fi">Suomi 🇫🇮</option>
+                            <option value="pl">Polski 🇵🇱</option>
+                            <option value="el">Ελληνικά 🇬🇷</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- NOTIFICATIONS -->
+            <section
+                class="section"
+                id="notificationsSection"
+                aria-labelledby="notificationsHeading">
+
+                <div class="notification-card">
+
+                    <h2
+                        id="notificationsHeading"
+                        data-key="notifications">
+                        Notifications
+                    </h2>
+
+                    <p id="notificationText">
+                        No new notifications.
+                    </p>
+
+                </div>
+
+            </section>
+
+            <!-- SETTINGS -->
+            <section
+                class="section"
+                id="settingsSection"
+                aria-labelledby="settingsHeading">
+
+                <div class="settings-card">
+
+                    <h2
+                        id="settingsHeading"
+                        data-key="settings">
+                        Settings
+                    </h2>
+
+                    <p data-key="languagePreference">
+                        Your language preference is saved automatically.
+                    </p>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+<script>
+
+    /* =========================
+       TRANSLATIONS
+    ========================= */
+
+    const translations = {
+
+        en: {
+            home: "Home",
+            profile: "Profile",
+            notifications: "Notifications",
+            settings: "Settings",
+            logout: "Logout",
+            congratulations: "Congratulations 🎊",
+            welcome: "Welcome to your personal dashboard.",
+            balanceMessage: "Balance has been added, process your withdraw now.",
+            availableBalance: "Available Balance",
+            hide: "Hide",
+            show: "Show",
+            withdraw: "Withdraw",
+            accountInformation: "Account Information",
+            name: "Name",
+            email: "Email",
+            security: "Security",
+            status: "Status",
+            active: "Active",
+            securityLevel: "Security",
+            language: "Language",
+            languagePreference: "Your language preference is saved automatically.",
+            accountHolder: "Account Holder",
+            noNotifications: "No new notifications.",
+            skip: "Skip to main content"
+        },
+
+        es: {
+            home: "Inicio",
+            profile: "Perfil",
+            notifications: "Notificaciones",
+            settings: "Configuración",
+            logout: "Cerrar sesión",
+            congratulations: "¡Felicidades! 🎊",
+            welcome: "Bienvenido a tu panel personal.",
+            balanceMessage: "El saldo ha sido agregado, procesa tu retiro ahora.",
+            availableBalance: "Saldo disponible",
+            hide: "Ocultar",
+            show: "Mostrar",
+            withdraw: "Retirar",
+            accountInformation: "Información de la cuenta",
+            name: "Nombre",
+            email: "Correo electrónico",
+            security: "Seguridad",
+            status: "Estado",
+            active: "Activo",
+            securityLevel: "Seguridad",
+            language: "Idioma",
+            languagePreference: "Tu preferencia de idioma se guarda automáticamente.",
+            accountHolder: "Titular de la cuenta",
+            noNotifications: "No hay nuevas notificaciones.",
+            skip: "Saltar al contenido principal"
+        },
+
+        fr: {
+            home: "Accueil",
+            profile: "Profil",
+            notifications: "Notifications",
+            settings: "Paramètres",
+            logout: "Déconnexion",
+            congratulations: "Félicitations 🎊",
+            welcome: "Bienvenue sur votre tableau de bord personnel.",
+            balanceMessage: "Le solde a été ajouté, traitez votre retrait maintenant.",
+            availableBalance: "Solde disponible",
+            hide: "Masquer",
+            show: "Afficher",
+            withdraw: "Retirer",
+            accountInformation: "Informations du compte",
+            name: "Nom",
+            email: "E-mail",
+            security: "Sécurité",
+            status: "Statut",
+            active: "Actif",
+            securityLevel: "Sécurité",
+            language: "Langue",
+            languagePreference: "Votre préférence de langue est enregistrée automatiquement.",
+            accountHolder: "Titulaire du compte",
+            noNotifications: "Aucune nouvelle notification.",
+            skip: "Passer au contenu principal"
+        },
+
+        de: {
+            home: "Startseite",
+            profile: "Profil",
+            notifications: "Benachrichtigungen",
+            settings: "Einstellungen",
+            logout: "Abmelden",
+            congratulations: "Herzlichen Glückwunsch 🎊",
+            welcome: "Willkommen in Ihrem persönlichen Dashboard.",
+            balanceMessage: "Das Guthaben wurde hinzugefügt. Bearbeiten Sie jetzt Ihre Auszahlung.",
+            availableBalance: "Verfügbares Guthaben",
+            hide: "Ausblenden",
+            show: "Anzeigen",
+            withdraw: "Auszahlen",
+            accountInformation: "Kontoinformationen",
+            name: "Name",
+            email: "E-Mail",
+            security: "Sicherheit",
+            status: "Status",
+            active: "Aktiv",
+            securityLevel: "Sicherheit",
+            language: "Sprache",
+            languagePreference: "Ihre Spracheinstellung wird automatisch gespeichert.",
+            accountHolder: "Kontoinhaber",
+            noNotifications: "Keine neuen Benachrichtigungen.",
+            skip: "Zum Hauptinhalt springen"
+        },
+
+        pt: {
+            home: "Início",
+            profile: "Perfil",
+            notifications: "Notificações",
+            settings: "Configurações",
+            logout: "Sair",
+            congratulations: "Parabéns 🎊",
+            welcome: "Bem-vindo ao seu painel pessoal.",
+            balanceMessage: "O saldo foi adicionado, processe seu saque agora.",
+            availableBalance: "Saldo disponível",
+            hide: "Ocultar",
+            show: "Mostrar",
+            withdraw: "Sacar",
+            accountInformation: "Informações da conta",
+            name: "Nome",
+            email: "E-mail",
+            security: "Segurança",
+            status: "Status",
+            active: "Ativo",
+            securityLevel: "Segurança",
+            language: "Idioma",
+            languagePreference: "Sua preferência de idioma é salva automaticamente.",
+            accountHolder: "Titular da conta",
+            noNotifications: "Nenhuma nova notificação.",
+            skip: "Ir para o conteúdo principal"
+        },
+
+        it: {
+            home: "Home",
+            profile: "Profilo",
+            notifications: "Notifiche",
+            settings: "Impostazioni",
+            logout: "Esci",
+            congratulations: "Congratulazioni 🎊",
+            welcome: "Benvenuto nella tua dashboard personale.",
+            balanceMessage: "Il saldo è stato aggiunto, procedi ora con il tuo prelievo.",
+            availableBalance: "Saldo disponibile",
+            hide: "Nascondi",
+            show: "Mostra",
+            withdraw: "Preleva",
+            accountInformation: "Informazioni account",
+            name: "Nome",
+            email: "E-mail",
+            security: "Sicurezza",
+            status: "Stato",
+            active: "Attivo",
+            securityLevel: "Sicurezza",
+            language: "Lingua",
+            languagePreference: "La tua preferenza linguistica viene salvata automaticamente.",
+            accountHolder: "Titolare dell'account",
+            noNotifications: "Nessuna nuova notifica.",
+            skip: "Vai al contenuto principale"
+        },
+
+        nl: {
+            home: "Home",
+            profile: "Profiel",
+            notifications: "Meldingen",
+            settings: "Instellingen",
+            logout: "Uitloggen",
+            congratulations: "Gefeliciteerd 🎊",
+            welcome: "Welkom bij je persoonlijke dashboard.",
+            balanceMessage: "Het saldo is toegevoegd, verwerk nu je opname.",
+            availableBalance: "Beschikbaar saldo",
+            hide: "Verbergen",
+            show: "Tonen",
+            withdraw: "Opnemen",
+            accountInformation: "Accountinformatie",
+            name: "Naam",
+            email: "E-mail",
+            security: "Beveiliging",
+            status: "Status",
+            active: "Actief",
+            securityLevel: "Beveiliging",
+            language: "Taal",
+            languagePreference: "Je taalvoorkeur wordt automatisch opgeslagen.",
+            accountHolder: "Accounthouder",
+            noNotifications: "Geen nieuwe meldingen.",
+            skip: "Ga naar hoofdinhoud"
+        },
+
+        sv: {
+            home: "Hem",
+            profile: "Profil",
+            notifications: "Aviseringar",
+            settings: "Inställningar",
+            logout: "Logga ut",
+            congratulations: "Grattis 🎊",
+            welcome: "Välkommen till din personliga instrumentpanel.",
+            balanceMessage: "Saldot har lagts till, behandla ditt uttag nu.",
+            availableBalance: "Tillgängligt saldo",
+            hide: "Dölj",
+            show: "Visa",
+            withdraw: "Ta ut",
+            accountInformation: "Kontoinformation",
+            name: "Namn",
+            email: "E-post",
+            security: "Säkerhet",
+            status: "Status",
+            active: "Aktiv",
+            securityLevel: "Säkerhet",
+            language: "Språk",
+            languagePreference: "Din språkpreferens sparas automatiskt.",
+            accountHolder: "Kontoinnehavare",
+            noNotifications: "Inga nya aviseringar.",
+            skip: "Hoppa till huvudinnehåll"
+        },
+
+        no: {
+            home: "Hjem",
+            profile: "Profil",
+            notifications: "Varsler",
+            settings: "Innstillinger",
+            logout: "Logg ut",
+            congratulations: "Gratulerer 🎊",
+            welcome: "Velkommen til ditt personlige kontrollpanel.",
+            balanceMessage: "Saldoen er lagt til, behandle uttaket ditt nå.",
+            availableBalance: "Tilgjengelig saldo",
+            hide: "Skjul",
+            show: "Vis",
+            withdraw: "Ta ut",
+            accountInformation: "Kontoinformasjon",
+            name: "Navn",
+            email: "E-post",
+            security: "Sikkerhet",
+            status: "Status",
+            active: "Aktiv",
+            securityLevel: "Sikkerhet",
+            language: "Språk",
+            languagePreference: "Språkpreferansen din lagres automatisk.",
+            accountHolder: "Kontoinnehaver",
+            noNotifications: "Ingen nye varsler.",
+            skip: "Hopp til hovedinnhold"
+        },
+
+        da: {
+            home: "Hjem",
+            profile: "Profil",
+            notifications: "Meddelelser",
+            settings: "Indstillinger",
+            logout: "Log ud",
+            congratulations: "Tillykke 🎊",
+            welcome: "Velkommen til dit personlige dashboard.",
+            balanceMessage: "Saldoen er blevet tilføjet, behandl din hævning nu.",
+            availableBalance: "Tilgængelig saldo",
+            hide: "Skjul",
+            show: "Vis",
+            withdraw: "Hæv",
+            accountInformation: "Kontooplysninger",
+            name: "Navn",
+            email: "E-mail",
+            security: "Sikkerhed",
+            status: "Status",
+            active: "Aktiv",
+            securityLevel: "Sikkerhed",
+            language: "Sprog",
+            languagePreference: "Din sprogindstilling gemmes automatisk.",
+            accountHolder: "Kontohaver",
+            noNotifications: "Ingen nye meddelelser.",
+            skip: "Spring til hovedindhold"
+        },
+
+        fi: {
+            home: "Etusivu",
+            profile: "Profiili",
+            notifications: "Ilmoitukset",
+            settings: "Asetukset",
+            logout: "Kirjaudu ulos",
+            congratulations: "Onnittelut 🎊",
+            welcome: "Tervetuloa henkilökohtaiseen hallintapaneeliisi.",
+            balanceMessage: "Saldo on lisätty, käsittele nostosi nyt.",
+            availableBalance: "Käytettävissä oleva saldo",
+            hide: "Piilota",
+            show: "Näytä",
+            withdraw: "Nosta",
+            accountInformation: "Tilin tiedot",
+            name: "Nimi",
+            email: "Sähköposti",
+            security: "Turvallisuus",
+            status: "Tila",
+            active: "Aktiivinen",
+            securityLevel: "Turvallisuus",
+            language: "Kieli",
+            languagePreference: "Kieliasetuksesi tallennetaan automaattisesti.",
+            accountHolder: "Tilinhaltija",
+            noNotifications: "Ei uusia ilmoituksia.",
+            skip: "Siirry pääsisältöön"
+        },
+
+        pl: {
+            home: "Strona główna",
+            profile: "Profil",
+            notifications: "Powiadomienia",
+            settings: "Ustawienia",
+            logout: "Wyloguj",
+            congratulations: "Gratulacje 🎊",
+            welcome: "Witamy na Twoim osobistym panelu.",
+            balanceMessage: "Saldo zostało dodane, przetwórz teraz swoją wypłatę.",
+            availableBalance: "Dostępne saldo",
+            hide: "Ukryj",
+            show: "Pokaż",
+            withdraw: "Wypłać",
+            accountInformation: "Informacje o koncie",
+            name: "Imię i nazwisko",
+            email: "E-mail",
+            security: "Bezpieczeństwo",
+            status: "Status",
+            active: "Aktywny",
+            securityLevel: "Bezpieczeństwo",
+            language: "Język",
+            languagePreference: "Twoje ustawienie języka jest zapisywane automatycznie.",
+            accountHolder: "Właściciel konta",
+            noNotifications: "Brak nowych powiadomień.",
+            skip: "Przejdź do głównej treści"
+        },
+
+        el: {
+            home: "Αρχική",
+            profile: "Προφίλ",
+            notifications: "Ειδοποιήσεις",
+            settings: "Ρυθμίσεις",
+            logout: "Αποσύνδεση",
+            congratulations: "Συγχαρητήρια 🎊",
+            welcome: "Καλώς ήρθατε στον προσωπικό σας πίνακα ελέγχου.",
+            balanceMessage: "Το υπόλοιπο προστέθηκε, επεξεργαστείτε τώρα την ανάληψή σας.",
+            availableBalance: "Διαθέσιμο υπόλοιπο",
+            hide: "Απόκρυψη",
+            show: "Εμφάνιση",
+            withdraw: "Ανάληψη",
+            accountInformation: "Πληροφορίες λογαριασμού",
+            name: "Όνομα",
+            email: "Email",
+            security: "Ασφάλεια",
+            status: "Κατάσταση",
+            active: "Ενεργό",
+            securityLevel: "Ασφάλεια",
+            language: "Γλώσσα",
+            languagePreference: "Η προτίμηση γλώσσας σας αποθηκεύεται αυτόματα.",
+            accountHolder: "Κάτοχος λογαριασμού",
+            noNotifications: "Δεν υπάρχουν νέες ειδοποιήσεις.",
+            skip: "Μετάβαση στο κύριο περιεχόμενο"
+        }
+
+    };
+
+
+    /* =========================
+       COUNTRY / CURRENCY
+    ========================= */
+
+    const currencySettings = {
+
+        Canada: {
+            code: "CAD",
+            symbol: "$",
+            rate: 1.36,
+            locale: "en-CA"
+        },
+
+        "United States": {
+            code: "USD",
+            symbol: "$",
+            rate: 1,
+            locale: "en-US"
+        },
+
+        Mexico: {
+            code: "MXN",
+            symbol: "$",
+            rate: 18.5,
+            locale: "es-MX"
+        },
+
+        Argentina: {
+            code: "ARS",
+            symbol: "$",
+            rate: 1450,
+            locale: "es-AR"
+        },
+
+        Brazil: {
+            code: "BRL",
+            symbol: "R$",
+            rate: 5.4,
+            locale: "pt-BR"
+        },
+
+        "United Kingdom": {
+            code: "GBP",
+            symbol: "£",
+            rate: 0.74,
+            locale: "en-GB"
+        },
+
+        Ireland: {
+            code: "EUR",
+            symbol: "€",
+            rate: 0.85,
+            locale: "en-IE"
+        },
+
+        France: {
+            code: "EUR",
+            symbol: "€",
+            rate: 0.85,
+            locale: "fr-FR"
+        },
+
+        Germany: {
+            code: "EUR",
+            symbol: "€",
+            rate: 0.85,
+            locale: "de-DE"
+        },
+
+        Spain: {
+            code: "EUR",
+            symbol: "€",
+            rate: 0.85,
+            locale: "es-ES"
+        },
+
+        Italy: {
+            code: "EUR",
+            symbol: "€",
+            rate: 0.85,
+            locale: "it-IT"
+        },
+
+        Portugal: {
+            code: "EUR",
+            symbol: "€",
+            rate: 0.85,
+            locale: "pt-PT"
+        },
+
+        Netherlands: {
+            code: "EUR",
+            symbol: "€",
+            rate: 0.85,
+            locale: "nl-NL"
+        },
+
+        Belgium: {
+            code: "EUR",
+            symbol: "€",
+            rate: 0.85,
+            locale: "nl-BE"
+        },
+
+        Switzerland: {
+            code: "CHF",
+            symbol: "CHF ",
+            rate: 0.80,
+            locale: "de-CH"
+        },
+
+        Austria: {
+            code: "EUR",
+            symbol: "€",
+            rate: 0.85,
+            locale: "de-AT"
+        },
+
+        Sweden: {
+            code: "SEK",
+            symbol: "kr ",
+            rate: 9.35,
+            locale: "sv-SE"
+        },
+
+        Norway: {
+            code: "NOK",
+            symbol: "kr ",
+            rate: 9.95,
+            locale: "nb-NO"
+        },
+
+        Denmark: {
+            code: "DKK",
+            symbol: "kr ",
+            rate: 6.35,
+            locale: "da-DK"
+        },
+
+        Finland: {
+            code: "EUR",
+            symbol: "€",
+            rate: 0.85,
+            locale: "fi-FI"
+        },
+
+        Poland: {
+            code: "PLN",
+            symbol: "zł ",
+            rate: 3.65,
+            locale: "pl-PL"
+        },
+
+        Greece: {
+            code: "EUR",
+            symbol: "€",
+            rate: 0.85,
+            locale: "el-GR"
+        },
+
+        Australia: {
+            code: "AUD",
+            symbol: "$",
+            rate: 1.52,
+            locale: "en-AU"
+        },
+
+        "New Zealand": {
+            code: "NZD",
+            symbol: "$",
+            rate: 1.67,
+            locale: "en-NZ"
+        }
+
+    };
+
+
+    /* =========================
+       LANGUAGE
+    ========================= */
+
+    let currentLanguage =
+        localStorage.getItem("language") || "en";
+
+    if (!translations[currentLanguage]) {
+        currentLanguage = "en";
+    }
+
+
+    function applyLanguage() {
+
+        const t = translations[currentLanguage];
+
+        document.documentElement.lang = currentLanguage;
+
+        document.title = t.congratulations;
+
+        document.querySelectorAll("[data-key]").forEach(element => {
+
+            const key = element.getAttribute("data-key");
+
+            if (t[key]) {
+                element.textContent = t[key];
+            }
+
+        });
+
+        document.getElementById("welcomeTitle").textContent =
+            t.congratulations;
+
+        const account = getAccount();
+
+        const userName =
+            account && account.name
+                ? account.name
+                : t.accountHolder;
+
+        document.getElementById("welcomeName").textContent =
+            userName;
+
+        document.getElementById("welcomeUser").textContent =
+            t.welcome;
+
+        document.getElementById("balanceMessage").textContent =
+            t.balanceMessage;
+
+        document.getElementById("hideBalanceText").textContent =
+            balanceHidden ? t.show : t.hide;
+
+        document.getElementById("hideBalanceBtn").setAttribute(
+            "aria-label",
+            balanceHidden ? t.show : t.hide
+        );
+
+        document.getElementById("skipLink").textContent =
+            t.skip;
+
+        document.getElementById("languageSelect").value =
+            currentLanguage;
+
+        updateBalance();
+
+        const notification =
+            localStorage.getItem("notifications");
+
+        document.getElementById("notificationText").textContent =
+            notification || t.noNotifications;
+
+        updatePageTitle();
+
+    }
+
+
+    function changeLanguage(language) {
+
+        if (!translations[language]) {
+            language = "en";
+        }
+
+        currentLanguage = language;
+
+        localStorage.setItem(
+            "language",
+            currentLanguage
+        );
+
+        applyLanguage();
+    }
+
+
+    /* =========================
+       ACCOUNT
+    ========================= */
+
+    function getAccount() {
+
+        try {
+
+            const savedAccount =
+                localStorage.getItem("demoAccount");
+
+            if (!savedAccount) {
+                return null;
+            }
+
+            return JSON.parse(savedAccount);
+
+        } catch (error) {
+
+            return null;
+        }
+    }
+
+
+    function loadAccount() {
+
+        const account = getAccount();
+
+        const t = translations[currentLanguage];
+
+        const name =
+            account && account.name
+                ? account.name
+                : t.accountHolder;
+
+        const email =
+            account && account.email
+                ? account.email
+                : "—";
+
+        document.getElementById("welcomeName").textContent =
+            name;
+
+        document.getElementById("profileName").textContent =
+            name;
+
+        document.getElementById("profileEmail").textContent =
+            email;
+    }
+
+
+    /* =========================
+       BALANCE
+    ========================= */
+
+    let balanceHidden = false;
+
+
+    function getBalance() {
+
+        const savedBalance =
+            localStorage.getItem("demoBalance");
+
+        if (savedBalance === null) {
+
+            localStorage.setItem(
+                "demoBalance",
+                "10000"
+            );
+
+            return 10000;
+        }
+
+        const numberBalance =
+            Number(savedBalance);
+
+        if (!Number.isFinite(numberBalance)) {
+
+            localStorage.setItem(
+                "demoBalance",
+                "10000"
+            );
+
+            return 10000;
+        }
+
+        if (numberBalance === 5000) {
+
+            localStorage.setItem(
+                "demoBalance",
+                "10000"
+            );
+
+            return 10000;
+        }
+
+        return numberBalance;
+    }
+
+
+    function getSelectedCountry() {
+
+        return localStorage.getItem(
+            "selectedCountry"
+        ) || "United States";
+    }
+
+
+    function getCurrencySettings() {
+
+        const country =
+            getSelectedCountry();
+
+        return currencySettings[country] ||
+            currencySettings["United States"];
+    }
+
+
+    function formatBalance(amountUSD) {
+
+        const currency =
+            getCurrencySettings();
+
+        const convertedAmount =
+            amountUSD * currency.rate;
+
+        const formattedNumber =
+            convertedAmount.toLocaleString(
+                currency.locale,
+                {
+                    minimumFractionDigits:
+                        currency.code === "JPY" ? 0 : 2,
+
+                    maximumFractionDigits:
+                        currency.code === "JPY" ? 0 : 2
+                }
+            );
+
+        return currency.code +
+            " " +
+            currency.symbol +
+            formattedNumber;
+    }
+
+
+    function updateBalance() {
+
+        const balanceElement =
+            document.getElementById("balanceAmount");
+
+        if (balanceHidden) {
+
+            balanceElement.textContent =
+                getCurrencySettings().code +
+                " ••••••";
+
+        } else {
+
+            balanceElement.textContent =
+                formatBalance(getBalance());
+
+        }
+    }
+
+
+    function toggleBalance() {
+
+        balanceHidden = !balanceHidden;
+
+        const t =
+            translations[currentLanguage];
+
+        const button =
+            document.getElementById("hideBalanceBtn");
+
+        document.getElementById("hideBalanceText").textContent =
+            balanceHidden ? t.show : t.hide;
+
+        button.setAttribute(
+            "aria-pressed",
+            String(balanceHidden)
+        );
+
+        button.setAttribute(
+            "aria-label",
+            balanceHidden ? t.show : t.hide
+        );
+
+        updateBalance();
+    }
+
+
+    /* =========================
+       PAGE TITLE
+    ========================= */
+
+    function updatePageTitle() {
+
+        const activeSection =
+            document.querySelector(".section.active");
+
+        if (!activeSection) {
+            return;
+        }
+
+        const t =
+            translations[currentLanguage];
+
+        if (activeSection.id === "homeSection") {
+
+            document.getElementById("pageTitle").textContent =
+                t.congratulations;
+
+        } else if (activeSection.id === "profileSection") {
+
+            document.getElementById("pageTitle").textContent =
+                t.profile;
+
+        } else if (activeSection.id === "notificationsSection") {
+
+            document.getElementById("pageTitle").textContent =
+                t.notifications;
+
+        } else if (activeSection.id === "settingsSection") {
+
+            document.getElementById("pageTitle").textContent =
+                t.settings;
+        }
+    }
+
+
+    /* =========================
+       NAVIGATION
+    ========================= */
+
+    function clearActiveButtons() {
+
+        document.querySelectorAll(".nav button")
+            .forEach(button => {
+
+                button.classList.remove("active");
+                button.removeAttribute("aria-current");
+
+            });
+    }
+
+
+    function showSection(sectionId, buttonId, title) {
+
+        document.querySelectorAll(".section")
+            .forEach(section => {
+
+                section.classList.remove("active");
+
+            });
+
+        document.getElementById(sectionId)
+            .classList.add("active");
+
+        clearActiveButtons();
+
+        const button =
+            document.getElementById(buttonId);
+
+        if (button) {
+
+            button.classList.add("active");
+
+            button.setAttribute(
+                "aria-current",
+                "page"
+            );
+        }
+
+        document.getElementById("pageTitle").textContent =
+            title;
+
+        closeSidebar();
+
+        moveFocusToContent();
+    }
+
+
+    function showHome() {
+
+        showSection(
+            "homeSection",
+            "homeNavBtn",
+            translations[currentLanguage].congratulations
+        );
+    }
+
+
+    function showProfile() {
+
+        showSection(
+            "profileSection",
+            "profileNavBtn",
+            translations[currentLanguage].profile
+        );
+    }
+
+
+    function showNotifications() {
+
+        showSection(
+            "notificationsSection",
+            "notificationsNavBtn",
+            translations[currentLanguage].notifications
+        );
+    }
+
+
+    function showSettings() {
+
+        showSection(
+            "settingsSection",
+            "settingsNavBtn",
+            translations[currentLanguage].settings
+        );
+    }
+
+
+    /* =========================
+       MOBILE SIDEBAR
+    ========================= */
+
+    function toggleSidebar() {
+
+        const sidebar =
+            document.getElementById("sidebar");
+
+        const menuBtn =
+            document.getElementById("menuBtn");
+
+        const overlay =
+            document.getElementById("overlay");
+
+        const isOpen =
+            sidebar.classList.toggle("open");
+
+        menuBtn.setAttribute(
+            "aria-expanded",
+            String(isOpen)
+        );
+
+        menuBtn.setAttribute(
+            "aria-label",
+            isOpen
+                ? "Close navigation menu"
+                : "Open navigation menu"
+        );
+
+        overlay.classList.toggle(
+            "show",
+            isOpen
+        );
+    }
+
+
+    function closeSidebar() {
+
+        const sidebar =
+            document.getElementById("sidebar");
+
+        const menuBtn =
+            document.getElementById("menuBtn");
+
+        const overlay =
+            document.getElementById("overlay");
+
+        sidebar.classList.remove("open");
+
+        overlay.classList.remove("show");
+
+        menuBtn.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        menuBtn.setAttribute(
+            "aria-label",
+            "Open navigation menu"
+        );
+    }
+
+
+    function moveFocusToContent() {
+
+        const main =
+            document.getElementById("mainContent");
+
+        main.focus();
+    }
+
+
+    /* =========================
+       LOGOUT
+    ========================= */
+
+    function logout() {
+
+        localStorage.removeItem("loggedIn");
+
+        window.location.href =
+            "index.html";
+    }
+
+
+    /* =========================
+       KEYBOARD ESCAPE
+    ========================= */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Escape") {
+                closeSidebar();
+            }
+
+        }
+    );
+
+
+    /* =========================
+       INITIAL LOAD
+    ========================= */
+
+    getBalance();
+
+    loadAccount();
+
+    applyLanguage();
+
+    loadAccount();
+
+</script>
+
+</body>
+</html>
